@@ -7,6 +7,8 @@ setup(
     author_email = 'yen3rc@gmail.com',
     packages = find_packages(exclude=['examples', 'tests', 'results']),
     include_package_data = True,
+    test_suite='nose.collector',
+    tests_require=['nose'],
     entry_points = {
         'console_scripts': ['max_comsubseq.py=py_pcpe2.main:main'],
     },
