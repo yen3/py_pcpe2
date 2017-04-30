@@ -16,8 +16,6 @@ class _Env(object):
             return self._temp_path
         def fset(self, value):
             self._temp_path = value
-        def fdel(self):
-            del self._temp_path
         return locals()
     temp_path = property(**temp_path())
 
@@ -27,8 +25,6 @@ class _Env(object):
             return self._buffer_size
         def fset(self, value):
             self._buffer_size = value
-        def fdel(self):
-            del self._buffer_size
         return locals()
     buffer_size = property(**buffer_size())
 
@@ -38,8 +34,6 @@ class _Env(object):
             return self._io_buffer_size
         def fset(self, value):
             self._io_buffer_size = value
-        def fdel(self):
-            del self._io_buffer_size
         return locals()
     io_buffer_size = property(**io_buffer_size())
 
@@ -49,8 +43,6 @@ class _Env(object):
             return self._output_min_len
         def fset(self, value):
             self._output_min_len = value
-        def fdel(self):
-            del self._output_min_len
         return locals()
     output_min_len = property(**output_min_len())
 
@@ -60,8 +52,6 @@ class _Env(object):
             return self._compare_seq_size
         def fset(self, value):
             self._compare_seq_size = value
-        def fdel(self):
-            del self._compare_seq_size
         return locals()
     compare_seq_size = property(**compare_seq_size())
 
@@ -71,8 +61,6 @@ class _Env(object):
             return self._thread_size
         def fset(self, value):
             self._thread_size = value
-        def fdel(self):
-            del self._thread_size
         return locals()
     thread_size = property(**thread_size())
 

@@ -1,8 +1,10 @@
-from unittest import TestCase
-
+import unittest
 import os
+import os.path
 
-def test_read_fasta():
-    print(os.getcwd())
-    print(__file__)
-    assert True == True
+import test.env
+
+class TestReadFASTA(unittest.TestCase):
+	def test_env(self):
+		self.assertTrue(os.path.isdir(test.env.test_data_folder))
+		self.assertTrue(os.path.isdir(test.env.test_output_folder))
