@@ -1,5 +1,7 @@
 # Python scripts for PCPE2
 
+![travis-ci](https://travis-ci.org/yen3/py_pcpe2.svg?branch=master)
+
 * The project is under construction.
 
 ## Requirement
