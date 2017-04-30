@@ -12,5 +12,5 @@ setup(
     entry_points = {
         'console_scripts': ['max_comsubseq.py=pypcpe2.main:main'],
     },
-    url = 'https://github.com/yen3/py_pcpe2',
+    url = 'https://github.com/yen3/pypcpe2',
 )
