@@ -46,28 +46,72 @@ class TestReadFASTA(unittest.TestCase):
         self.assertEqual(ans, fs)
 
     def test_create_id_info_file_seq1(self):
-        seq_path = os.path.join(test.env.test_data_folder,
+        fasta_path = os.path.join(test.env.test_data_folder,
                                 'test_seq1_fasta.txt')
         info_path = os.path.join(test.env.test_output_folder,
                                  'test_seq1_id_info.txt')
-        golden_path = os.path.join(test.env.test_data_folder,
-                                'goldenkey', 'test_seq1_id_info.txt')
+        ans_path = os.path.join(test.env.test_data_folder,
+                                'test_seq1_id_info.txt')
 
-        read_fasta.create_id_info_file(seq_path, info_path)
+        read_fasta.create_id_info_file(fasta_path, info_path)
 
-        with open(golden_path) as f_ans, open(info_path) as f_info:
+        with open(ans_path) as f_ans, open(info_path) as f_info:
             self.assertEqual(f_ans.read(), f_info.read())
 
     def test_create_id_info_file_seq2(self):
-        seq_path = os.path.join(test.env.test_data_folder,
+        fasta_path = os.path.join(test.env.test_data_folder,
                                 'test_seq2_fasta.txt')
         info_path = os.path.join(test.env.test_output_folder,
                                  'test_seq2_id_info.txt')
-        golden_path = os.path.join(test.env.test_data_folder,
-                                'goldenkey', 'test_seq2_id_info.txt')
+        ans_path = os.path.join(test.env.test_data_folder,
+                                'test_seq2_id_info.txt')
 
-        read_fasta.create_id_info_file(seq_path, info_path)
+        read_fasta.create_id_info_file(fasta_path, info_path)
 
-        with open(golden_path) as f_ans, open(info_path) as f_info:
+        with open(ans_path) as f_ans, open(info_path) as f_info:
             self.assertEqual(f_ans.read(), f_info.read())
+
+    def test_create_seq_id_file_seq1(self):
+        fasta_path = os.path.join(test.env.test_data_folder,
+                                'test_seq1_fasta.txt')
+        seq_path = os.path.join(test.env.test_output_folder,
+                                 'test_seq1_seq.txt')
+        id_path = os.path.join(test.env.test_output_folder,
+                                 'test_seq1_id.txt')
+
+        ans_seq_path = os.path.join(test.env.test_data_folder,
+                                    'test_seq1.txt')
+        ans_id_path = os.path.join(test.env.test_data_folder,
+                                    'test_seq1_id.txt')
+
+        read_fasta.create_seq_id_file(fasta_path, seq_path, id_path)
+
+        with open(ans_seq_path) as f_ans, open(seq_path) as f_seq:
+            self.assertEqual(f_ans.read(), f_seq.read())
+
+        with open(ans_id_path) as f_ans, open(id_path) as f_id:
+            self.assertEqual(f_ans.read(), f_id.read())
+
+    def test_create_seq_id_file_seq2(self):
+        fasta_path = os.path.join(test.env.test_data_folder,
+                                'test_seq2_fasta.txt')
+        seq_path = os.path.join(test.env.test_output_folder,
+                                 'test_seq2_seq.txt')
+        id_path = os.path.join(test.env.test_output_folder,
+                                 'test_seq2_id.txt')
+
+        ans_seq_path = os.path.join(test.env.test_data_folder,
+                                    'test_seq2.txt')
+        ans_id_path = os.path.join(test.env.test_data_folder,
+                                    'test_seq2_id.txt')
+
+        read_fasta.create_seq_id_file(fasta_path, seq_path, id_path)
+
+        with open(ans_seq_path) as f_ans, open(seq_path) as f_seq:
+            self.assertEqual(f_ans.read(), f_seq.read())
+
+        with open(ans_id_path) as f_ans, open(id_path) as f_id:
+            self.assertEqual(f_ans.read(), f_id.read())
+
+
 
