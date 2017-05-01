@@ -1,12 +1,19 @@
 >gi|9999999999|gb|AOS87590|pypcpe2 test sequence1
 ABCDEFG
 >gi|9999999998|gb|AOS87590|pypcpe2 test sequence2
-ABCDEFGH
+ABCDE
+FGH
 >gi|9999999997|gb|AOS87590|pypcpe2 test sequence3
-ABCDEFGH
+ABCDEFG
+H
 >gi|9999999996|gb|AOS87590|pypcpe2 test sequence4
-ABCDEFGH
+A
+BCDEFGH
 >gi|9999999995|gb|AOS87590|pypcpe2 test sequence5
-ABCDEFGHI
+AB
+CD
+EF
+GH
+I
 >gi|9999999994|gb|AOS87590|pypcpe2 test sequence6
 ABCDEFGHI
