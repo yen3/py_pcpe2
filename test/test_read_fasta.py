@@ -87,10 +87,22 @@ class TestReadFASTA(unittest.TestCase):
         read_fasta.create_seq_id_file(fasta_path, seq_path, id_path)
 
         with open(ans_seq_path) as f_ans, open(seq_path) as f_seq:
-            self.assertEqual(f_ans.read(), f_seq.read())
+            ans = f_ans.readlines()
+            ans.sort()
+
+            seqs = f_seq.readlines()
+            seqs.sort()
+
+            self.assertEqual(ans, seqs)
 
         with open(ans_id_path) as f_ans, open(id_path) as f_id:
-            self.assertEqual(f_ans.read(), f_id.read())
+            ans = f_ans.readlines()
+            ans.sort()
+
+            fid = f_id.readlines()
+            fid.sort()
+
+            self.assertEqual(ans, fid)
 
     def test_create_seq_id_file_seq2(self):
         fasta_path = os.path.join(test.env.test_data_folder,
@@ -108,10 +120,22 @@ class TestReadFASTA(unittest.TestCase):
         read_fasta.create_seq_id_file(fasta_path, seq_path, id_path)
 
         with open(ans_seq_path) as f_ans, open(seq_path) as f_seq:
-            self.assertEqual(f_ans.read(), f_seq.read())
+            ans = f_ans.readlines()
+            ans.sort()
+
+            seqs = f_seq.readlines()
+            seqs.sort()
+
+            self.assertEqual(ans, seqs)
 
         with open(ans_id_path) as f_ans, open(id_path) as f_id:
-            self.assertEqual(f_ans.read(), f_id.read())
+            ans = f_ans.readlines()
+            ans.sort()
+
+            fid = f_id.readlines()
+            fid.sort()
+
+            self.assertEqual(ans, fid)
 
 
 
