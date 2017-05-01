@@ -45,3 +45,29 @@ class TestReadFASTA(unittest.TestCase):
         fs = [fasta for fasta in read_fasta.read_fasta_file(path)]
         self.assertEqual(ans, fs)
 
+    def test_create_id_info_file_seq1(self):
+        seq_path = os.path.join(test.env.test_data_folder,
+                                'test_seq1_fasta.txt')
+        info_path = os.path.join(test.env.test_output_folder,
+                                 'test_seq1_id_info.txt')
+        golden_path = os.path.join(test.env.test_data_folder,
+                                'goldenkey', 'test_seq1_id_info.txt')
+
+        read_fasta.create_id_info_file(seq_path, info_path)
+
+        with open(golden_path) as f_ans, open(info_path) as f_info:
+            self.assertEqual(f_ans.read(), f_info.read())
+
+    def test_create_id_info_file_seq2(self):
+        seq_path = os.path.join(test.env.test_data_folder,
+                                'test_seq2_fasta.txt')
+        info_path = os.path.join(test.env.test_output_folder,
+                                 'test_seq2_id_info.txt')
+        golden_path = os.path.join(test.env.test_data_folder,
+                                'goldenkey', 'test_seq2_id_info.txt')
+
+        read_fasta.create_id_info_file(seq_path, info_path)
+
+        with open(golden_path) as f_ans, open(info_path) as f_info:
+            self.assertEqual(f_ans.read(), f_info.read())
+

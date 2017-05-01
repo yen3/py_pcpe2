@@ -90,6 +90,28 @@ def read_fasta_file(path):
         yield id_line.strip(), seq.strip()
 
 
+def create_id_info_file(seq_path, info_path):
+    """
+    Parse fasta file to make a fasta id information file.
+
+    The output file format is as the following.
+
+        [FASTA ID_0] [INFO_0]
+        [FASTA ID_1] [INFO_1]
+        ...
+        [FASTA ID_n] [INFO_n]
+
+    Args:
+        seq_path (str): The input fasta file
+        info_path (str): The output fasta information file.
+    """
+    with open(info_path, 'w') as fout:
+        for info, _ in read_fasta_file(seq_path):
+            fasta_id = retrieve_fasta_id(info)
+
+            fout.write(" ".join([fasta_id, info]) + "\n")
+
+
 def create_seq_file(path):
     sf = SeqFile(path)
     SeqFile.parse_seqfile(sf)

@@ -1,0 +1,6 @@
+9999999999 >gi|9999999999|gb|AOS87590|pypcpe2 test sequence1
+9999999998 >gi|9999999998|gb|AOS87590|pypcpe2 test sequence2
+9999999997 >gi|9999999997|gb|AOS87590|pypcpe2 test sequence3
+9999999996 >gi|9999999996|gb|AOS87590|pypcpe2 test sequence4
+9999999995 >gi|9999999995|gb|AOS87590|pypcpe2 test sequence5
+9999999994 >gi|9999999994|gb|AOS87590|pypcpe2 test sequence6
