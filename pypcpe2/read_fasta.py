@@ -159,6 +159,8 @@ def create_seq_id_file(fasta_path, seq_path, id_path):
         f_seq.write(str(len(seq_ids)) + "\n")
         f_id.write(str(len(seq_ids)) + "\n")
 
+        # Make sure the two files are line-to-line mapping, write the seq and
+        # ids in the same time.
         for seq, ids in seq_ids.items():
             f_seq.write(" ".join([str(len(seq)), seq]) + "\n")
 
