@@ -67,7 +67,7 @@ def retrieve_fasta_id(id_line):
 
 def read_fasta_file(path):
     """
-    Generator function for the path.
+    Generator function for reading fasta file.
 
     Returns:
         info: the first line of the sequences
