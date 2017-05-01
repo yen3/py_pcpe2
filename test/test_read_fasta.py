@@ -60,7 +60,7 @@ class TestReadFASTA(unittest.TestCase):
 
     def test_create_id_info_file_seq2(self):
         fasta_path = os.path.join(test.env.test_data_folder,
-                                'test_seq2_fasta.txt')
+                                  'test_seq2_fasta.txt')
         info_path = os.path.join(test.env.test_output_folder,
                                  'test_seq2_id_info.txt')
         ans_path = os.path.join(test.env.test_data_folder,
@@ -73,11 +73,11 @@ class TestReadFASTA(unittest.TestCase):
 
     def test_create_seq_id_file_seq1(self):
         fasta_path = os.path.join(test.env.test_data_folder,
-                                'test_seq1_fasta.txt')
+                                  'test_seq1_fasta.txt')
         seq_path = os.path.join(test.env.test_output_folder,
-                                 'test_seq1_seq.txt')
+                                'test_seq1_seq.txt')
         id_path = os.path.join(test.env.test_output_folder,
-                                 'test_seq1_id.txt')
+                               'test_seq1_id.txt')
 
         ans_seq_path = os.path.join(test.env.test_data_folder,
                                     'test_seq1.txt')
@@ -106,16 +106,16 @@ class TestReadFASTA(unittest.TestCase):
 
     def test_create_seq_id_file_seq2(self):
         fasta_path = os.path.join(test.env.test_data_folder,
-                                'test_seq2_fasta.txt')
+                                  'test_seq2_fasta.txt')
         seq_path = os.path.join(test.env.test_output_folder,
-                                 'test_seq2_seq.txt')
+                                'test_seq2_seq.txt')
         id_path = os.path.join(test.env.test_output_folder,
-                                 'test_seq2_id.txt')
+                               'test_seq2_id.txt')
 
         ans_seq_path = os.path.join(test.env.test_data_folder,
                                     'test_seq2.txt')
         ans_id_path = os.path.join(test.env.test_data_folder,
-                                    'test_seq2_id.txt')
+                                   'test_seq2_id.txt')
 
         read_fasta.create_seq_id_file(fasta_path, seq_path, id_path)
 
@@ -136,6 +136,3 @@ class TestReadFASTA(unittest.TestCase):
             fid.sort()
 
             self.assertEqual(ans, fid)
-
-
-
