@@ -5,6 +5,8 @@ The module supports read fasta file and save to related data structures.
 """
 import collections
 
+from pypcpe2 import utility
+
 
 class SeqFile(object):
     """
@@ -16,9 +18,11 @@ class SeqFile(object):
             fasta_path (str) : the input fasta file path
         """
         self._fasta_path = fasta_path
-        self._seq_path = ""
-        self._id_path = ""
-        self._id_info_path = ""
+
+        name = utility.retrieve_basename(self._fasta_path)
+        self._seq_path = utility.make_temp_path(name + "_seq.txt")
+        self._id_path = utility.make_temp_path(name + "_id.txt")
+        self._id_info_path = utility.make_temp_path(name + "_id_info.txt")
 
     @staticmethod
     def parse_seqfile(seqfile):
