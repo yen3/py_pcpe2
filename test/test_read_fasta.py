@@ -7,6 +7,7 @@ import test.env
 from pypcpe2 import read_fasta
 
 
+
 class TestReadFASTA(unittest.TestCase):
     def setUp(self):
         self.test_data_folder = test.env.test_data_folder
@@ -26,6 +27,15 @@ class TestReadFASTA(unittest.TestCase):
 
     def tearDown(self):
         pass
+
+    def compare_sorted_file_content(self, x_path, y_path):
+        with open(x_path) as fx, open(y_path) as fy:
+            xlines = fx.readlines()
+            ylines = fy.readlines()
+
+            xlines.sort()
+            ylines.sort()
+            self.assertEqual(xlines, ylines)
 
     def test_env(self):
         self.assertTrue(os.path.isdir(self.test_data_folder))
@@ -92,23 +102,9 @@ class TestReadFASTA(unittest.TestCase):
 
         read_fasta.create_seq_id_file(fasta_path, seq_path, id_path)
 
-        with open(ans_seq_path) as f_ans, open(seq_path) as f_seq:
-            ans = f_ans.readlines()
-            ans.sort()
-
-            seqs = f_seq.readlines()
-            seqs.sort()
-
-            self.assertEqual(ans, seqs)
-
-        with open(ans_id_path) as f_ans, open(id_path) as f_id:
-            ans = f_ans.readlines()
-            ans.sort()
-
-            fid = f_id.readlines()
-            fid.sort()
-
-            self.assertEqual(ans, fid)
+        # Compare with answer
+        self.compare_sorted_file_content(ans_seq_path, seq_path)
+        self.compare_sorted_file_content(ans_id_path, id_path)
 
     def test_create_seq_id_file_seq2(self):
         fasta_path = self.seqfile2.fasta_path
@@ -120,20 +116,6 @@ class TestReadFASTA(unittest.TestCase):
 
         read_fasta.create_seq_id_file(fasta_path, seq_path, id_path)
 
-        with open(ans_seq_path) as f_ans, open(seq_path) as f_seq:
-            ans = f_ans.readlines()
-            ans.sort()
-
-            seqs = f_seq.readlines()
-            seqs.sort()
-
-            self.assertEqual(ans, seqs)
-
-        with open(ans_id_path) as f_ans, open(id_path) as f_id:
-            ans = f_ans.readlines()
-            ans.sort()
-
-            fid = f_id.readlines()
-            fid.sort()
-
-            self.assertEqual(ans, fid)
+        # Compare with answer
+        self.compare_sorted_file_content(ans_seq_path, seq_path)
+        self.compare_sorted_file_content(ans_id_path, id_path)
