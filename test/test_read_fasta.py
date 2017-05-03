@@ -7,7 +7,6 @@ import test.env
 from pypcpe2 import read_fasta
 
 
-
 class TestReadFASTA(unittest.TestCase):
     def setUp(self):
         self.test_data_folder = test.env.test_data_folder
