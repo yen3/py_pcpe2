@@ -3,7 +3,7 @@
 ![travis-ci](https://travis-ci.org/yen3/py_pcpe2.svg?branch=master)
 
 * **The project is under construction.**
-* The project could compare DNA/protein sequences.
+* The program can finds maximum common subseqences from DNA/protein seqeucnes.
   * It supports large number of seqeucnes comparasion (>= 100000).
   * The project wraps [pcpe2](https://github.com/yen3/pcpe2) as a python module.
     to speedup the compare time.
