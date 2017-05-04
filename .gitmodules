@@ -1,0 +1,3 @@
+[submodule "core/pcpe2_core"]
+	path = core/pcpe2_core
+	url = https://github.com/yen3/pcpe2
