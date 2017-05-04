@@ -23,7 +23,7 @@ class SeqFile(object):
 
         name = utility.retrieve_basename(self._fasta_path)
 
-        get_valid_path = lambda default_path, arg_path : \
+        get_valid_path = lambda default_path, arg_path: \
             os.path.abspath(arg_path) if arg_path is not None else default_path
 
         self._seq_path = get_valid_path(
@@ -63,16 +63,24 @@ SeqInfo = collections.namedtuple('SeqInfo', ['seq', 'ids'])
 
 
 class SeqFileInfo(object):
+    """
+    Save all sequences's information. Construct these informations from parsed
+    files.
+    """
     def __init__(self, seq_file):
         self._seq_file = seq_file
-        self._seq_info = list()
-        self._id_info = dict()
+        self._seq_info = read_seq_id_files(self._seq_file.seq_path,
+                                           self._seq_file.id_path)
+        self._id_info = read_id_info_file(self._seq_file.id_info_path)
 
-    def get_seq_info(self, index):
-        return self._seq_info[index]
+    @property
+    def seq_info(self):
+        return self._seq_info
 
-    def get_id_info(self, fasta_id):
-        return self._id_info[fasta_id]
+    @property
+    def id_info(self):
+        return self._id_info
+
 
 
 def retrieve_fasta_id(id_line):
@@ -179,6 +187,61 @@ def create_seq_id_file(fasta_path, seq_path, id_path):
 
             write_ids = [len(ids)] + ids
             f_id.write(" ".join([str(i) for i in write_ids]) + "\n")
+
+
+def read_id_info_file(id_info_path):
+    """
+    Create a dictionary to save the information for each fasta id.
+
+    Args:
+        id_info_path (str): the input file path
+
+    Return:
+        a dictionary
+            key (str) presents fasta id.
+            value (str) presents fasta information.
+    """
+    id_info = dict()
+
+    with open(id_info_path, 'r') as fin:
+        for line in fin:
+            words = line.split()
+
+            fasta_id = words[0]
+            fasta_info = " ".join(words[1:])
+            id_info[fasta_id] = fasta_info
+
+    return id_info
+
+def read_seq_id_files(seq_path, id_path):
+    """
+    Create a list to save the sequence and fasta ids.
+
+    It's possible a unique seqeucne to map several fasta ids.
+
+    Args:
+        seq_path (str): the input sequence file path
+        id_path (str): the input ids file path
+
+    Return:
+        A list of SeqInfo.
+        Each element of the list present
+            seq (str) : the sequence
+            ids ([str]) : a list of fasta ids
+    """
+    seq_info = list()
+
+    with open(seq_path, 'r') as fseq, open(id_path, 'r') as fid:
+        seq_lines = fseq.read().splitlines()[1:]
+        id_lines = fid.read().splitlines()[1:]
+
+        for seq_line, ids_line in zip(seq_lines, id_lines):
+            seq = seq_line.split()[1]
+            ids = ids_line.split()[1:]
+
+            seq_info.append(SeqInfo(seq, ids))
+
+    return seq_info
 
 
 def create_seq_file(fasta_path):

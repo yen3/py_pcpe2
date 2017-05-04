@@ -184,3 +184,117 @@ class TestReadFASTA(unittest.TestCase):
         # Compare with answer
         self.assertTrue(compare_sorted_file_content(ans_seq_path, seq_path))
         self.assertTrue(compare_sorted_file_content(ans_id_path, id_path))
+
+    def test_read_fasta_id_info_seq1(self):
+        id_info = read_fasta.read_id_info_file(self.seqfile1.id_info_path)
+
+        ans = {'9999999999':
+               '>gi|9999999999|gb|AOS87590|pypcpe2 test sequence1',
+               '9999999998':
+               '>gi|9999999998|gb|AOS87590|pypcpe2 test sequence2',
+               '9999999997':
+               '>gi|9999999997|gb|AOS87590|pypcpe2 test sequence3',
+               '9999999996':
+               '>gi|9999999996|gb|AOS87590|pypcpe2 test sequence4',
+               '9999999995':
+               '>gi|9999999995|gb|AOS87590|pypcpe2 test sequence5',
+               '9999999994':
+               '>gi|9999999994|gb|AOS87590|pypcpe2 test sequence6'}
+
+        self.assertEqual(id_info, ans)
+
+    def test_read_fasta_id_info_seq2(self):
+        id_info = read_fasta.read_id_info_file(self.seqfile2.id_info_path)
+
+        ans = {'9999999993':
+               '>gi|9999999993|gb|AOS87590|pypcpe2 test sequence7',
+               '9999999992':
+               '>gi|9999999992|gb|AOS87590|pypcpe2 test sequence8',
+               '9999999991':
+               '>gi|9999999991|gb|AOS87590|pypcpe2 test sequence9',
+               '9999999990':
+               '>gi|9999999990|gb|AOS87590|pypcpe2 test sequence10',
+               '9999999989':
+               '>gi|9999999989|gb|AOS87590|pypcpe2 test sequence11'}
+
+        self.assertEqual(id_info, ans)
+
+    def test_read_seq_id_files_seq1(self):
+        seq_info = read_fasta.read_seq_id_files(
+            self.seqfile1.seq_path, self.seqfile1.id_path)
+        seq_info.sort(key=lambda si:si.seq)
+
+        ans = [read_fasta.SeqInfo(seq='ABCDEFG', ids=['9999999999']),
+               read_fasta.SeqInfo(seq='ABCDEFGH',
+                                  ids=['9999999998', '9999999997',
+                                       '9999999996']),
+               read_fasta.SeqInfo(seq='ABCDEFGHI',
+                                  ids=['9999999995', '9999999994'])]
+
+        self.assertEqual(seq_info, ans)
+
+    def test_read_seq_id_files_seq2(self):
+        seq_info = read_fasta.read_seq_id_files(
+            self.seqfile2.seq_path, self.seqfile2.id_path)
+        seq_info.sort(key=lambda si:si.seq)
+        ans = [read_fasta.SeqInfo(seq='BCDEFG',
+                                  ids=['9999999993', '9999999992']),
+               read_fasta.SeqInfo(seq='CDEFGHI',
+                                  ids=['9999999991', '9999999990',
+                                       '9999999989'])]
+
+        self.assertEqual(seq_info, ans)
+
+    def test_create_seq_file_info_object_seq1(self):
+        seq_info = read_fasta.SeqFileInfo(self.seqfile1)
+
+        info_ans = {'9999999999':
+                '>gi|9999999999|gb|AOS87590|pypcpe2 test sequence1',
+                '9999999998':
+                '>gi|9999999998|gb|AOS87590|pypcpe2 test sequence2',
+                '9999999997':
+                '>gi|9999999997|gb|AOS87590|pypcpe2 test sequence3',
+                '9999999996':
+                '>gi|9999999996|gb|AOS87590|pypcpe2 test sequence4',
+                '9999999995':
+                '>gi|9999999995|gb|AOS87590|pypcpe2 test sequence5',
+                '9999999994':
+                '>gi|9999999994|gb|AOS87590|pypcpe2 test sequence6'}
+
+        seq_ans = [read_fasta.SeqInfo(seq='ABCDEFG', ids=['9999999999']),
+                   read_fasta.SeqInfo(seq='ABCDEFGH',
+                                      ids=['9999999998', '9999999997',
+                                           '9999999996']),
+                   read_fasta.SeqInfo(seq='ABCDEFGHI',
+                                      ids=['9999999995', '9999999994'])]
+
+
+        self.assertEqual(info_ans, seq_info.id_info)
+
+        seq_info.seq_info.sort()
+        self.assertEqual(seq_ans, seq_info.seq_info)
+
+    def test_create_seq_file_info_object_seq2(self):
+        seq_info = read_fasta.SeqFileInfo(self.seqfile2)
+
+        info_ans = {'9999999993':
+                    '>gi|9999999993|gb|AOS87590|pypcpe2 test sequence7',
+                    '9999999992':
+                    '>gi|9999999992|gb|AOS87590|pypcpe2 test sequence8',
+                    '9999999991':
+                    '>gi|9999999991|gb|AOS87590|pypcpe2 test sequence9',
+                    '9999999990':
+                    '>gi|9999999990|gb|AOS87590|pypcpe2 test sequence10',
+                    '9999999989':
+                    '>gi|9999999989|gb|AOS87590|pypcpe2 test sequence11'}
+        seq_ans = [read_fasta.SeqInfo(seq='BCDEFG',
+                                      ids=['9999999993', '9999999992']),
+                   read_fasta.SeqInfo(seq='CDEFGHI',
+                                      ids=['9999999991', '9999999990',
+                                           '9999999989'])]
+
+        self.assertEqual(info_ans, seq_info.id_info)
+
+        seq_info.seq_info.sort()
+        self.assertEqual(seq_ans, seq_info.seq_info)
+
