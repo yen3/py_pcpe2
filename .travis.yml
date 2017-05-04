@@ -13,10 +13,14 @@ addons:
     packages:
     - g++-4.8
     - python-dev
-    - cmake 
+    - cmake
+
+before_install:
+  - export CXX=g++-4.8
+  - export CC=gcc-4.8
 
 install:
- - pip install -r requirements.txt
+  - pip install -r requirements.txt
 
 script:
   - python setup.py develop
