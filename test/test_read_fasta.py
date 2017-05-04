@@ -74,6 +74,28 @@ class TestReadFASTA(unittest.TestCase):
         self.assertEqual(seqfile.id_path, ans_id_path)
         self.assertEqual(seqfile.id_info_path, ans_id_info_path)
 
+    def test_seq_file_parsing_seq1(self):
+        seqfile = read_fasta.create_seq_file(self.seqfile1.fasta_path)
+
+        self.assertTrue(compare_sorted_file_content(seqfile.seq_path,
+                                                    self.seqfile1.seq_path))
+        self.assertTrue(compare_sorted_file_content(seqfile.id_path,
+                                                    self.seqfile1.id_path))
+        self.assertTrue(
+            compare_sorted_file_content(seqfile.id_info_path,
+                                        self.seqfile1.id_info_path))
+
+    def test_seq_file_parsing_seq2(self):
+        seqfile = read_fasta.create_seq_file(self.seqfile2.fasta_path)
+
+        self.assertTrue(compare_sorted_file_content(seqfile.seq_path,
+                                                    self.seqfile2.seq_path))
+        self.assertTrue(compare_sorted_file_content(seqfile.id_path,
+                                                    self.seqfile2.id_path))
+        self.assertTrue(
+            compare_sorted_file_content(seqfile.id_info_path,
+                                        self.seqfile2.id_info_path))
+
     def test_retrieve_fasta_id(self):
         id_line1 = ">gi|9999999999|gb|AOS87590|pypcpe2 test sequence1"
         id_line2 = (">gi|1034563939|ref|XP_016858498.1| PREDICTED: "

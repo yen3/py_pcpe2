@@ -34,13 +34,13 @@ class SeqFile(object):
             utility.make_temp_path(name + "_id_info.txt"), id_info_path)
 
     @staticmethod
-    def parse_seqfile(seqfile):
+    def parse_fasta(seqfile):
         """
         Parse the input fasta file to construct all files needed in the
         following steps.
         """
-        create_seq_id_file(seqfile.seq_path, seqfile.seq_path, seqfile.id_path)
-        create_id_info_file(seqfile.seq_path, seqfile.id_info_path)
+        create_seq_id_file(seqfile.fasta_path, seqfile.seq_path, seqfile.id_path)
+        create_id_info_file(seqfile.fasta_path, seqfile.id_info_path)
 
     @property
     def seq_path(self):
@@ -189,6 +189,6 @@ def create_seq_file(fasta_path):
         fasta_path (str): the input fasta file path
     """
     seq_file = SeqFile(fasta_path)
-    SeqFile.parse_seqfile(seq_file)
+    SeqFile.parse_fasta(seq_file)
 
     return seq_file
