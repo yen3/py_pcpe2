@@ -48,6 +48,32 @@ class TestReadFASTA(unittest.TestCase):
         self.assertTrue(os.path.isdir(self.test_data_folder))
         self.assertTrue(os.path.isdir(self.test_output_folder))
 
+    def test_seq_file_object_create_seq1(self):
+        seqfile = read_fasta.SeqFile(self.seqfile1.fasta_path)
+        self.assertEqual(seqfile.fasta_path, self.seqfile1.fasta_path)
+
+        ans_seq_path = os.path.join(self.test_output_folder, "test1_seq.txt")
+        ans_id_path = os.path.join(self.test_output_folder, "test1_id.txt")
+        ans_id_info_path = os.path.join(self.test_output_folder,
+                                        "test1_id_info.txt")
+
+        self.assertEqual(seqfile.seq_path, ans_seq_path)
+        self.assertEqual(seqfile.id_path, ans_id_path)
+        self.assertEqual(seqfile.id_info_path, ans_id_info_path)
+
+    def test_seq_file_object_create_seq2(self):
+        seqfile = read_fasta.SeqFile(self.seqfile2.fasta_path)
+        self.assertEqual(seqfile.fasta_path, self.seqfile2.fasta_path)
+
+        ans_seq_path = os.path.join(self.test_output_folder, "test2_seq.txt")
+        ans_id_path = os.path.join(self.test_output_folder, "test2_id.txt")
+        ans_id_info_path = os.path.join(self.test_output_folder,
+                                        "test2_id_info.txt")
+
+        self.assertEqual(seqfile.seq_path, ans_seq_path)
+        self.assertEqual(seqfile.id_path, ans_id_path)
+        self.assertEqual(seqfile.id_info_path, ans_id_info_path)
+
     def test_retrieve_fasta_id(self):
         id_line1 = ">gi|9999999999|gb|AOS87590|pypcpe2 test sequence1"
         id_line2 = (">gi|1034563939|ref|XP_016858498.1| PREDICTED: "
