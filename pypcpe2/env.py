@@ -1,4 +1,6 @@
 import multiprocessing
+import os
+import os.path
 
 
 class _Env(object):
@@ -9,6 +11,9 @@ class _Env(object):
         self._output_min_len = 10
         self._compare_seq_size = 10000
         self._thread_size = multiprocessing.cpu_count()
+
+        if not os.path.isdir(self._temp_path):
+            os.makedirs(self._temp_path)
 
     def temp_path():
         doc = "The temp_path property."
