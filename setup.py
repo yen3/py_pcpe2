@@ -22,7 +22,7 @@ class get_pybind_include(object):
 
 ext_modules = [
     Extension(
-        'python_example',
+        'pcpe2_core',
         ['core/pcpe2_core.cc'],
         include_dirs=[
             # Path to pybind11 headers

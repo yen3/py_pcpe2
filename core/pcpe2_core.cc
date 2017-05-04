@@ -35,12 +35,12 @@ std::vector<std::string> add_string_suffix(std::vector<std::string>& ss) {
 
 namespace py = pybind11;
 
-PYBIND11_PLUGIN(python_example) {
-    py::module m("python_example", R"pbdoc(
+PYBIND11_PLUGIN(pcpe2_core) {
+    py::module m("pcpe2_core", R"pbdoc(
         Pybind11 example plugin
         -----------------------
 
-        .. currentmodule:: python_example
+        .. currentmodule:: pcpe2_core
 
         .. autosummary::
            :toctree: _generate
