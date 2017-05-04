@@ -5,11 +5,18 @@ python:
   - "3.5"
   - "3.6"
 
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    - deadsnakes
+    packages:
+    - g++-4.8
+    - python-dev
+    - cmake 
+
 install:
-  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-  - sudo apt-get update -qq
-  - sudo apt-get install -qq build-essential cmake
-  - pip install -r requirements.txt
+ - pip install -r requirements.txt
 
 script:
   - python setup.py develop
