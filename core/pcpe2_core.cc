@@ -1,43 +1,21 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
+#include "com_subseq_sort.h"
+#include "small_seq_hash.h"
+#include "max_comsubseq.h"
+#include "env.h"
+#include "pcpe_util.h"
+
 #include <iostream>
 #include <string>
 #include <vector>
-
-int add(int i, int j) {
-    return i + j;
-}
-
-int subtract(int i, int j) {
-    return i - j;
-}
-
-void print_string(std::string& s) {
-  std::cout << s << std::endl;
-}
-
-std::string return_the_same_string(std::string& s) {
-  std::string s1(s);
-  return s1;
-}
-
-std::vector<std::string> add_string_suffix(std::vector<std::string>& ss) {
-  std::vector<std::string> rs;
-
-  for (const auto& s : ss) {
-    rs.emplace_back(s + "_cpp11");
-  }
-
-  return rs;
-}
-
 
 namespace py = pybind11;
 
 PYBIND11_PLUGIN(pcpe2_core) {
     py::module m("pcpe2_core", R"pbdoc(
-        Pybind11 example plugin
+        pcpe2 core
         -----------------------
 
         .. currentmodule:: pcpe2_core
@@ -49,51 +27,66 @@ PYBIND11_PLUGIN(pcpe2_core) {
            subtract
     )pbdoc");
 
-    m.def("add", &add, R"pbdoc(
-        Add two numbers
+    m.def("env_set_temp_path", [](const std::string& path){
+          pcpe::gEnv.setTempFolderPath(path);
+        },
+        R"pbdoc(
+          Set the temp folder path
+        )pbdoc");
 
-        Some other explanation about the add function.
-    )pbdoc");
+    m.def("env_get_temp_path", [](){
+          return pcpe::gEnv.getTempFolderPath();
+        },
+        R"pbdoc(
+          Get the temp folder path
+        )pbdoc");
 
-    m.def("subtract", &subtract, R"pbdoc(
-        Subtract two numbers
+    m.def("env_get_min_output_length", [](){
+          return pcpe::gEnv.getMinimumOutputLength();
+        },
+        R"pbdoc(
+          Get the minimum output length
+        )pbdoc");
 
-        Some other explanation about the subtract function.
-    )pbdoc");
+    m.def("env_set_min_output_length", [](uint32_t set_length){
+          pcpe::gEnv.setMinimumOutputLength(set_length);
+        },
+        R"pbdoc(
+          Set the minimum output length
+        )pbdoc");
 
-    m.def("print_str", &print_string, R"pbdoc(
-      Print a string to stdout.
-    )pbdoc");
+    m.def("compare_small_seqs",
+          [](const pcpe::FilePath& xfilepath, const pcpe::FilePath& yfilepath) {
+            std::vector<pcpe::FilePath> cs;
+            pcpe::CompareSmallSeqs(xfilepath, yfilepath, cs);
 
-    m.def("return_str", &return_the_same_string, R"pbdoc(
-      Return the same string.
-    )pbdoc");
+            return cs;
+          },
+          R"pbdoc(
+            Compare the small common subsequences with lenth 6.
+          )pbdoc");
 
-    m.def("add_str_list_suffix", &add_string_suffix, R"pbdoc(
-      Return the list of string with suffix.
-    )pbdoc");
+    m.def("sort_comsubseq_files",
+          [](const std::vector<pcpe::FilePath>& cs) {
+            std::vector<pcpe::FilePath> sorted_cs;
+            pcpe::SortComSubseqsFiles(cs, sorted_cs);
 
-    m.def("add_str_list_suffix2",
-        [](const std::vector<std::string>& ss) -> std::vector<std::string> {
-          std::vector<std::string> rs;
+            return sorted_cs;
+          },
+          R"pbdoc(
+            Sort each file which contains lists of ComSubseq.
+          )pbdoc");
 
-          for (const auto& s : ss) {
-            rs.emplace_back(s + "_cpp11");
-          }
+    m.def("max_sorted_comsubsq_files",
+          [](const std::vector<pcpe::FilePath>& sorted_cs) {
+            std::vector<pcpe::FilePath> max_cs;
+            pcpe::MaxSortedComSubseqs(sorted_cs, max_cs);
 
-          return rs;
-        }, R"pbdoc(
-      Return the list of string with suffix.
-    )pbdoc");
-
-
-
-
-#ifdef VERSION_INFO
-    m.attr("__version__") = py::str(VERSION_INFO);
-#else
-    m.attr("__version__") = py::str("dev");
-#endif
+            return max_cs;
+          },
+          R"pbdoc(
+            Find the maxmimum common subseqences for each sorted ComSubseq File.
+          )pbdoc");
 
     return m.ptr();
 }

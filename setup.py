@@ -4,6 +4,7 @@ import sys
 import setuptools
 import subprocess
 import shlex
+import os
 
 class get_pybind_include(object):
     """Helper class to determine the pybind11 include path
@@ -19,12 +20,17 @@ class get_pybind_include(object):
         import pybind11
         return pybind11.get_include(self.user)
 
+pcpe2_core_src = ['core/pcpe2_core.cc'] + \
+    [os.path.join('core/pcpe2_core/src', fn)
+     for fn in os.listdir('./core/pcpe2_core/src')
+     if fn.endswith(".cc")]
 
 ext_modules = [
     Extension(
         'pcpe2_core',
-        ['core/pcpe2_core.cc'],
+        pcpe2_core_src,
         include_dirs=[
+            'core/pcpe2_core/include',
             # Path to pybind11 headers
             get_pybind_include(),
             get_pybind_include(user=True)
