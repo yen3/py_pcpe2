@@ -297,4 +297,3 @@ class TestReadFASTA(unittest.TestCase):
 
         seq_info.seq_info.sort()
         self.assertEqual(seq_ans, seq_info.seq_info)
-

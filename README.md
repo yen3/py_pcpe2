@@ -1,6 +1,6 @@
 # PyPCPE2
 
-![travis-ci](https://travis-ci.org/yen3/py_pcpe2.svg?branch=master)
+![travis-ci](https://travis-ci.org/yen3/pypcpe2.svg?branch=master)
 
 * **The project is under construction.**
 * The program can finds maximum common subseqences from DNA/protein seqeucnes.
