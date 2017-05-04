@@ -8,6 +8,16 @@ from pypcpe2 import read_fasta
 from pypcpe2.env import env
 
 
+def compare_sorted_file_content(x_path, y_path):
+    with open(x_path) as fx, open(y_path) as fy:
+        xlines = fx.readlines()
+        ylines = fy.readlines()
+
+        xlines.sort()
+        ylines.sort()
+        return xlines == ylines
+
+
 class TestReadFASTA(unittest.TestCase):
     def setUp(self):
         self.test_data_folder = test.env.test_data_folder
@@ -33,15 +43,6 @@ class TestReadFASTA(unittest.TestCase):
 
     def tearDown(self):
         env().temp_path = self.saved_temp_path
-
-    def compare_sorted_file_content(self, x_path, y_path):
-        with open(x_path) as fx, open(y_path) as fy:
-            xlines = fx.readlines()
-            ylines = fy.readlines()
-
-            xlines.sort()
-            ylines.sort()
-            self.assertEqual(xlines, ylines)
 
     def test_env(self):
         self.assertTrue(os.path.isdir(self.test_data_folder))
@@ -119,8 +120,8 @@ class TestReadFASTA(unittest.TestCase):
         read_fasta.create_seq_id_file(fasta_path, seq_path, id_path)
 
         # Compare with answer
-        self.compare_sorted_file_content(ans_seq_path, seq_path)
-        self.compare_sorted_file_content(ans_id_path, id_path)
+        self.assertTrue(compare_sorted_file_content(ans_seq_path, seq_path))
+        self.assertTrue(compare_sorted_file_content(ans_id_path, id_path))
 
     def test_create_seq_id_file_seq2(self):
         fasta_path = self.seqfile2.fasta_path
@@ -133,5 +134,5 @@ class TestReadFASTA(unittest.TestCase):
         read_fasta.create_seq_id_file(fasta_path, seq_path, id_path)
 
         # Compare with answer
-        self.compare_sorted_file_content(ans_seq_path, seq_path)
-        self.compare_sorted_file_content(ans_id_path, id_path)
+        self.assertTrue(compare_sorted_file_content(ans_seq_path, seq_path))
+        self.assertTrue(compare_sorted_file_content(ans_id_path, id_path))
