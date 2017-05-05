@@ -32,15 +32,30 @@ class TestCore(unittest.TestCase):
 
 
         cs_paths = core.compare_small_seqs(seq1_path, seq2_path)
+
         self.assertEqual(len(cs_paths), 1)
-        cs_path = cs_paths[0]
+        seqs = comsubseq.read_comsubseq_file(cs_paths[0])
 
         ans_path = os.path.join(self.test_data_folder, "compare_hash_0")
-
-        seqs = comsubseq.read_comsubseq_file(cs_path)
         ans = comsubseq.read_comsubseq_file(ans_path)
+
         self.assertEqual(seqs, ans)
 
+    def test_sort_comsubseq_files(self):
+        cs_paths = [os.path.join(self.test_data_folder, "compare_hash_0")]
+        sorted_paths = core.sort_comsubseq_files(cs_paths)
+
+        ans = [comsubseq.ComSubseq(0, 0, 1, 0, 6),
+               comsubseq.ComSubseq(1, 0, 1, 0, 6),
+               comsubseq.ComSubseq(1, 1, 2, 0, 6),
+               comsubseq.ComSubseq(2, 0, 1, 0, 6),
+               comsubseq.ComSubseq(2, 1, 2, 0, 6),
+               comsubseq.ComSubseq(2, 1, 3, 1, 6)]
+
+        self.assertEqual(len(sorted_paths), 1)
+        seqs = comsubseq.read_comsubseq_file(sorted_paths[0])
+
+        self.assertEqual(seqs, ans)
 
     def test_env_temp_path(self):
         self.assertEqual(self.temp_path,

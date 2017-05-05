@@ -9,7 +9,7 @@ def compare_small_seqs(x_seq_path, y_seq_path):
 
 
 def sort_comsubseq_files(input_paths):
-    return  pcpe2_core.sort_comsubseq_files(input_paths)
+    return pcpe2_core.sort_comsubseq_files(input_paths)
 
 
 def search_max_comsubseq(input_paths):
