@@ -2,75 +2,76 @@ import multiprocessing
 import os
 import os.path
 
+import pcpe2_core
 
 class _Env(object):
     def __init__(self):
-        self._temp_path = "./temp"
-        self._buffer_size = 100 * 1024 * 1024
-        self._io_buffer_size = 16 * 1024 * 1024
-        self._output_min_len = 10
-        self._compare_seq_size = 10000
-        self._thread_size = multiprocessing.cpu_count()
+        self._temp_path = os.path.abspath(pcpe2_core.env_get_temp_path())
+        self._buffer_size = pcpe2_core.env_get_buffer_size()
+        self._io_buffer_size = pcpe2_core.env_get_io_buffer_size()
+        self._output_min_len = pcpe2_core.env_get_min_output_length()
+        self._compare_seq_size = pcpe2_core.env_get_compare_seq_size()
+        self._thread_size = pcpe2_core.env_get_thread_size()
 
         if not os.path.isdir(self._temp_path):
             os.makedirs(self._temp_path)
 
-    def temp_path():
-        doc = "The temp_path property."
-        def fget(self):
-            return self._temp_path
-        def fset(self, value):
-            self._temp_path = value
+    @property
+    def temp_path(self):
+        return self._temp_path
 
-            if not os.path.isdir(self._temp_path):
-                os.makedirs(self._temp_path)
-        return locals()
-    temp_path = property(**temp_path())
+    @temp_path.setter
+    def temp_path(self, path):
+        self._temp_path = os.path.abspath(path)
+        pcpe2_core.env_set_temp_path(self._temp_path)
 
-    def buffer_size():
-        doc = "The buffer_size property."
-        def fget(self):
-            return self._buffer_size
-        def fset(self, value):
-            self._buffer_size = value
-        return locals()
-    buffer_size = property(**buffer_size())
+        if not os.path.isdir(self._temp_path):
+            os.makedirs(self._temp_path)
 
-    def io_buffer_size():
-        doc = "The io_buffer_size property."
-        def fget(self):
-            return self._io_buffer_size
-        def fset(self, value):
-            self._io_buffer_size = value
-        return locals()
-    io_buffer_size = property(**io_buffer_size())
+    @property
+    def buffer_size(self):
+        return self._buffer_size
 
-    def output_min_len():
-        doc = "The output_min_len property."
-        def fget(self):
-            return self._output_min_len
-        def fset(self, value):
-            self._output_min_len = value
-        return locals()
-    output_min_len = property(**output_min_len())
+    @buffer_size.setter
+    def buffer_size(self, set_size):
+        self._buffer_size = set_size
+        pcpe2_core.env_set_buffer_size(self._buffer_size)
 
-    def compare_seq_size():
-        doc = "The compare_seq_size property."
-        def fget(self):
-            return self._compare_seq_size
-        def fset(self, value):
-            self._compare_seq_size = value
-        return locals()
-    compare_seq_size = property(**compare_seq_size())
+    @property
+    def io_buffer_size(self):
+        return self._io_buffer_size
 
-    def thread_size():
-        doc = "The thread_size property."
-        def fget(self):
-            return self._thread_size
-        def fset(self, value):
-            self._thread_size = value
-        return locals()
-    thread_size = property(**thread_size())
+    @io_buffer_size.setter
+    def io_buffer_size(self, set_size):
+        self._io_buffer_size = set_size
+        pcpe2_core.env_set_io_buffer_size(self._io_buffer_size)
+
+    @property
+    def output_min_len(self):
+        return self._output_min_len
+
+    @output_min_len.setter
+    def output_min_len(self, set_size):
+        self._output_min_len = set_size
+        pcpe2_core.env_set_min_output_length(self._output_min_len)
+
+    @property
+    def compare_seq_size(self):
+        return self._compare_seq_size
+
+    @compare_seq_size.setter
+    def compare_seq_size(self, set_size):
+        self._compare_seq_size = set_size
+        pcpe2_core.env_set_compare_seq_size(self._compare_seq_size)
+
+    @property
+    def thread_size(self):
+        return self._thread_size
+
+    @thread_size.setter
+    def thread_size(self, set_size):
+        self._thread_size = set_size
+        pcpe2_core.env_set_thread_size(self._thread_size)
 
 
 _env_instance = None
@@ -81,4 +82,3 @@ def env():
     else:
         _env_instance = _Env()
         return _env_instance
-
