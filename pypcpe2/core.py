@@ -30,6 +30,16 @@ def max_sorted_comsubsq_files(input_paths):
 
 
 def compare_seqs(x_seq_path, y_seq_path):
+    """
+    Find all common subseqences for the two seqeuence files.
+
+    Args:
+        x_seq_path (str): The input sequence file
+        y_seq_path (str): The compared input sequence file
+
+    Return:
+        A string present a path which contains list of ComSubseq
+    """
     seq_paths = compare_small_seqs(x_seq_path, y_seq_path)
     sorted_paths = sort_comsubseq_files(seq_paths)
     max_seq_paths = max_sorted_comsubsq_files(sorted_paths)
