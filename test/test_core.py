@@ -5,13 +5,17 @@ import pcpe2_core
 
 from pypcpe2.env import env
 from pypcpe2 import core
+from pypcpe2 import comsubseq
 import test.env
 
 
 class TestCore(unittest.TestCase):
     def setUp(self):
-        self.test_data_folder = test.env.test_data_folder
-        self.test_output_folder = test.env.test_output_folder
+        self.test_data_folder = os.path.join(test.env.test_data_folder, "core")
+        self.test_output_folder = os.path.join(test.env.test_output_folder,
+                                               "core")
+        if not os.path.isdir(self.test_output_folder):
+            os.makedirs(self.test_output_folder)
 
         self.saved_temp_path = env().temp_path
         env().temp_path = self.test_output_folder
@@ -23,11 +27,20 @@ class TestCore(unittest.TestCase):
         env().temp_path = self.saved_temp_path
 
     def test_compare_small_seqs(self):
-        seq1_fn = os.path.join(self.test_data_folder, "test1_seq.txt")
-        seq2_fn = os.path.join(self.test_data_folder, "test2_seq.txt")
+        seq1_path = os.path.join(self.test_data_folder, "test1_seq.txt")
+        seq2_path = os.path.join(self.test_data_folder, "test2_seq.txt")
 
-        cs = core.compare_small_seqs(seq1_fn, seq2_fn)
-        self.assertEqual(len(cs), 1)
+
+        cs_paths = core.compare_small_seqs(seq1_path, seq2_path)
+        self.assertEqual(len(cs_paths), 1)
+        cs_path = cs_paths[0]
+
+        ans_path = os.path.join(self.test_data_folder, "compare_hash_0")
+
+        seqs = comsubseq.read_comsubseq_file(cs_path)
+        ans = comsubseq.read_comsubseq_file(ans_path)
+        self.assertEqual(seqs, ans)
+
 
     def test_env_temp_path(self):
         self.assertEqual(self.temp_path,
