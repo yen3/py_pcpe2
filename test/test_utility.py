@@ -9,6 +9,12 @@ import test.env
 
 class TestUtility(unittest.TestCase):
     def setUp(self):
+        self.test_data_folder = os.path.join(test.env.test_data_folder, "utility")
+        self.test_output_folder = os.path.join(test.env.test_output_folder,
+                                               "utility")
+        if not os.path.isdir(self.test_output_folder):
+            os.makedirs(self.test_output_folder)
+
         self.saved_temp_path = env().temp_path
         env().temp_path = test.env.test_output_folder
         self.temp_path = env().temp_path
@@ -31,3 +37,14 @@ class TestUtility(unittest.TestCase):
         temp_path = "/home/test/test/test.txt.txt"
         ans_path = os.path.abspath(os.path.join(self.temp_path, "test.txt"))
         self.assertTrue(temp_path, ans_path)
+
+    def test_merge_file(self):
+        input_paths = [os.path.join(self.test_data_folder, fn)
+                       for fn in ['merge1.txt', 'merge2.txt', 'merge3.txt']]
+        output_path = utility.make_temp_path('merged.txt')
+        ans_path = os.path.join(self.test_data_folder, 'merged.txt')
+
+        utility.merge_file(input_paths, output_path)
+
+        with open(ans_path) as fans, open(output_path) as fout:
+            self.assertEqual(fans.read(), fout.read())
