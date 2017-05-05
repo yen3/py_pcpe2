@@ -27,34 +27,6 @@ PYBIND11_PLUGIN(pcpe2_core) {
            subtract
     )pbdoc");
 
-    m.def("env_set_temp_path", [](const std::string& path){
-          pcpe::gEnv.setTempFolderPath(path);
-        },
-        R"pbdoc(
-          Set the temp folder path
-        )pbdoc");
-
-    m.def("env_get_temp_path", [](){
-          return pcpe::gEnv.getTempFolderPath();
-        },
-        R"pbdoc(
-          Get the temp folder path
-        )pbdoc");
-
-    m.def("env_get_min_output_length", [](){
-          return pcpe::gEnv.getMinimumOutputLength();
-        },
-        R"pbdoc(
-          Get the minimum output length
-        )pbdoc");
-
-    m.def("env_set_min_output_length", [](uint32_t set_length){
-          pcpe::gEnv.setMinimumOutputLength(set_length);
-        },
-        R"pbdoc(
-          Set the minimum output length
-        )pbdoc");
-
     m.def("compare_small_seqs",
           [](const pcpe::FilePath& xfilepath, const pcpe::FilePath& yfilepath) {
             std::vector<pcpe::FilePath> cs;
@@ -87,6 +59,90 @@ PYBIND11_PLUGIN(pcpe2_core) {
           R"pbdoc(
             Find the maxmimum common subseqences for each sorted ComSubseq File.
           )pbdoc");
+
+    m.def("env_set_temp_path", [](const std::string& path){
+          pcpe::gEnv.setTempFolderPath(path);
+        },
+        R"pbdoc(
+          Set the temp folder path
+        )pbdoc");
+
+    m.def("env_get_temp_path", [](){
+          return pcpe::gEnv.getTempFolderPath();
+        },
+        R"pbdoc(
+          Get the temp folder path
+        )pbdoc");
+
+    m.def("env_get_min_output_length", [](){
+          return pcpe::gEnv.getMinimumOutputLength();
+        },
+        R"pbdoc(
+          Get the minimum output length
+        )pbdoc");
+
+    m.def("env_set_min_output_length", [](uint32_t set_length){
+          pcpe::gEnv.setMinimumOutputLength(set_length);
+        },
+        R"pbdoc(
+          Set the minimum output length
+        )pbdoc");
+
+    m.def("env_get_compare_seq_size", [](){
+          return pcpe::gEnv.getCompareSeqenceSize();
+        },
+        R"pbdoc(
+          Get the compare sequence size
+        )pbdoc");
+
+    m.def("env_set_compare_seq_size", [](uint32_t set_size){
+          pcpe::gEnv.setCompareSeqenceSize(set_size);
+        },
+        R"pbdoc(
+         Set the compare sequence size
+        )pbdoc");
+
+    m.def("env_get_thread_size", [](){
+          return pcpe::gEnv.getThreadsSize();
+        },
+        R"pbdoc(
+          Get the thread size
+        )pbdoc");
+
+    m.def("env_set_thread_size", [](uint32_t set_size){
+          pcpe::gEnv.setThreadSize(set_size);
+        },
+        R"pbdoc(
+          Set the thread size
+        )pbdoc");
+
+    m.def("env_get_buffer_size", [](){
+          return pcpe::gEnv.getBufferSize();
+        },
+        R"pbdoc(
+          Get the buffer size
+        )pbdoc");
+
+    m.def("env_set_buffer_size", [](uint32_t set_size){
+          pcpe::gEnv.setBufferSize(set_size);
+        },
+        R"pbdoc(
+         Set the buffer size
+        )pbdoc");
+
+    m.def("env_get_io_buffer_size", [](){
+          return pcpe::gEnv.getIOBufferSize();
+        },
+        R"pbdoc(
+          Get the IO buffer size
+        )pbdoc");
+
+    m.def("env_set_io_buffer_size", [](uint32_t set_size){
+          pcpe::gEnv.setIOBufferSize(set_size);
+        },
+        R"pbdoc(
+          Set the IO buffer size
+        )pbdoc");
 
     return m.ptr();
 }
