@@ -21,6 +21,9 @@ class _Env(object):
             return self._temp_path
         def fset(self, value):
             self._temp_path = value
+
+            if not os.path.isdir(self._temp_path):
+                os.makedirs(self._temp_path)
         return locals()
     temp_path = property(**temp_path())
 
