@@ -1,0 +1,18 @@
+>gi|9999999993|gb|AOS87590|pypcpe2 test sequence7
+B
+C
+D
+E
+F
+G
+>gi|9999999992|gb|AOS87590|pypcpe2 test sequence8
+BCD
+EFG
+>gi|9999999991|gb|AOS87590|pypcpe2 test sequence9
+C
+DEFGHI
+>gi|9999999990|gb|AOS87590|pypcpe2 test sequence10
+CDE
+FGHI
+>gi|9999999989|gb|AOS87590|pypcpe2 test sequence11
+CDEFGHI
