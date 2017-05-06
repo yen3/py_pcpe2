@@ -1,3 +1,7 @@
+"""
+Wrapper for pcpe_core external module.
+
+"""
 from pypcpe2 import utility
 
 import pcpe2_core
