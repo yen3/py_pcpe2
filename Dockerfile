@@ -5,5 +5,5 @@ RUN apt-get update && \
     apt-get install -y python3 python3-dev python-setuptools \
     python-pip python-virtualenv gcc g++
 
-RUN useradd jenkins --shell /bin/bash --create-home
-USER jenkins
+#RUN useradd jenkins --shell /bin/bash --create-home
+USER root
