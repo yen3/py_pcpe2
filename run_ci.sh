@@ -9,7 +9,7 @@
 #virtualenv -p python3 .env
 #. .env/bin/activate
 
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 
 python3 setup.py develop
 nosetests --detailed-errors --with-doctest -v
