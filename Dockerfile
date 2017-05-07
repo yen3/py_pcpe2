@@ -5,7 +5,7 @@ RUN apt-get update && \
     apt-get install -y python3 python3-dev python-setuptools \
     python-pip python-virtualenv gcc g++
 
-RUN sudo pip3 install nose pybind11
+RUN pip3 install nose pybind11
 
 #RUN useradd jenkins --shell /bin/bash --create-home
 #USER jenkins 
