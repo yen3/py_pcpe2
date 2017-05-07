@@ -11,6 +11,6 @@
 
 pip install -r requirements.txt
 
-python setup.py develop
+python3 setup.py develop
 nosetests --detailed-errors --with-doctest -v
 
