@@ -101,8 +101,6 @@ def read_requirements():
 
     return []
 
-subprocess.call(shlex.split("pip install -r requirements.txt"))
-
 setup(
     name='pypcpe2',
     version='2.2.0',
