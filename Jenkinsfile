@@ -4,8 +4,8 @@ pipeline {
         stage('build') {
             steps {
                 sh '''
-                sudo apt-get update
-                sudo apt-get install git -y
+                apt-get update
+                apt-get install git -y
                 git submodule init
                 git submodule update
                 python setup.py develop
