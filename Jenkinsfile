@@ -4,7 +4,7 @@ pipeline {
         stage('build') {
             steps {
                 sh '''
-                python setup.py develop
+                python setup.py develop --user
                 '''
             }
         }
