@@ -1,10 +1,10 @@
 pipeline {
-    agent { docker 'python:3.5.1' }
+    agent { docker 'ubuntu:16.04' }
     stages {
         stage('build') {
             steps {
                 sh '''
-                python setup.py develop --user
+                ./run_ci.sh
                 '''
             }
         }
