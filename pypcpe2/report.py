@@ -2,6 +2,17 @@ from pypcpe2 import read_fasta
 from pypcpe2 import comsubseq
 
 
+class Reporter(object):
+    def __init__(x_seqpath, y_seqpath, comsubseq_path):
+        self.x_seqpath = x_seqpath
+        self.y_seqpath = y_seqpath
+        self.comsubseq_path = comsubseq_path
+
+        self.x_seqinfo = read_fasta.SeqFileInfo(x_seqfile)
+        self.y_seqinfo = read_fasta.SeqFileInfo(y_seqfile)
+        self.comsubseqs = comsubseq.read_comsubseq_file(self.comsubseq_path)
+
+
 def make_human_report(x_seqinfo, y_seqinfo, seqs, output_path):
     with open(output_path, 'w') as fout:
         for seq in seqs:
@@ -27,10 +38,9 @@ def make_human_report(x_seqinfo, y_seqinfo, seqs, output_path):
             fout.write("\n")
             for n, yid in enumerate(y_ids):
                 fout.write("[y{n} - {yid}]: {fasta_id_info}\n".format(
-                    n=n, yid=yid, fasta_id_info=x_seqinfo.id_info[xid]))
+                    n=n, yid=yid, fasta_id_info=y_seqinfo.id_info[yid]))
 
             fout.write("\n==================================================\n")
-
 
 
 def make_machine_report(x_seqinfo, y_seqinfo, seqs, output_path):
