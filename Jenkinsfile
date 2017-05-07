@@ -1,12 +1,9 @@
-pipeline {
-    agent { docker 'ubuntu:16.04' }
-    stages {
-        stage('build') {
-            steps {
-                sh '''
-                ./run_ci.sh
-                '''
-            }
-        }
-    }
+node {
+    stage "Prepare environment"
+    checkout scm
+    def environment  = docker.build 'pcpe2_ubuntu'
+			environment.inside {
+					stage "Run ci script"
+							sh "./run_ci.sh"
+			}
 }
