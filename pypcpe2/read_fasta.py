@@ -1,5 +1,5 @@
 """
-Parsing FASTA file module.
+Parsing fasta file module.
 """
 import os.path
 import collections
@@ -158,10 +158,10 @@ class FastaSeqPath(object):
         return self._fasta_id_info_path
 
 
-Sequence = collections.namedtuple('Sequence', ['raw_seq', 'ids'])
+Sequence = collections.namedtuple('Sequence', ['raw_seq', 'fasta_ids'])
 
 
-class Sequences(object):
+class Sequences(collections.abc.Mapping):
     """
     Present each sequences'info. A dict's wrapper
         key (int) presents the sequence id
@@ -174,6 +174,18 @@ class Sequences(object):
         Users can not call the init function directly.
         """
         self._seqs = seqs
+
+    def __contains__(self, sid):
+        return sid in self._seqs
+
+    def __getitem__(self, sid):
+        return self._seqs[sid]
+
+    def __iter__(self):
+        return iter(self._seqs)
+
+    def __len__(self):
+        return len(self._seqs)
 
     @staticmethod
     def read_file(seq_path, fasta_id_path, sequence_ids=None):
@@ -193,9 +205,23 @@ class Sequences(object):
         Return:
             A Sequences object
         """
-        return None
+        seqs = dict()
 
-class FastaIDInfos(object):
+        with open(seq_path, 'r') as fseq, open(fasta_id_path, 'r') as fid:
+            seq_lines = fseq.read().splitlines()[1:]
+            id_lines = fid.read().splitlines()[1:]
+
+            for sid, (seq_line, ids_line) in enumerate(
+                zip(seq_lines, id_lines)):
+                if sequence_ids is None or sid in sequence_ids:
+                    raw_seq = seq_line.split()[1]
+                    fasta_ids = ids_line.split()[1:]
+                    seqs[sid] = Sequence(raw_seq, fasta_ids)
+
+        return Sequences(seqs)
+
+
+class FastaIDInfos(collections.abc.Mapping):
     """
     Present each fasta id's information. A dict's wrapper.
         key (str) presents fasta id.
@@ -206,6 +232,18 @@ class FastaIDInfos(object):
         Users can not call the init function directly.
         """
         self._id_info = id_info
+
+    def __contains__(self, sid):
+        return sid in self._id_info
+
+    def __getitem__(self, sid):
+        return self._id_info[sid]
+
+    def __iter__(self):
+        return iter(self._id_info)
+
+    def __len__(self):
+        return len(self._id_info)
 
     @staticmethod
     def read_file(path, fasta_ids=None):
@@ -229,16 +267,18 @@ class FastaIDInfos(object):
 
                 fasta_id = words[0]
                 fasta_info = " ".join(words[1:])
-                id_info[fasta_id] = fasta_info
+
+                if fasta_ids is None or fasta_id in fasta_ids:
+                    id_info[fasta_id] = fasta_info
 
         return FastaIDInfos(id_info)
 
 
 class FastaSeq(object):
     """
-    A small helper class to collect two major FASTA data structures.
+    A small helper class to collect two major fasta data structures.
     """
-    def __init__(self, fasta_seq_path, *, seqence_ids=None, fasta_ids=None):
+    def __init__(self, fasta_seq_path, *, sequence_ids=None, fasta_ids=None):
         self._seqs = Sequences.read_file(fasta_seq_path.seq_path,
                                          fasta_seq_path.fasta_id_path,
                                          sequence_ids)
@@ -256,14 +296,14 @@ class FastaSeq(object):
 
 def parse_fasta_file(path):
     """
-    Parsing the input FASTA file to create related data structures.
+    Parsing the input fasta file to create related data structures.
 
     Args:
         fasta_path (str): the input fasta file path
 
     Return:
         a FastaSeqPath object to point out the paths which contains parsed
-        infomation for the input FASTA file.
+        infomation for the input fasta file.
     """
     fasta_seq_path = FastaSeqPath(path)
 
@@ -274,4 +314,3 @@ def parse_fasta_file(path):
                               fasta_seq_path.fasta_id_info_path)
 
     return fasta_seq_path
-
