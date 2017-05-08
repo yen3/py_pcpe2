@@ -41,22 +41,22 @@ class TestReport(unittest.TestCase):
     def tearDown(self):
         env().temp_path = self.saved_temp_path
 
-    def test_make_human_report(self):
-        x_seqinfo = read_fasta.SeqFileInfo(self.x_seqfile)
-        y_seqinfo = read_fasta.SeqFileInfo(self.y_seqfile)
+    # def test_make_human_report(self):
+        # x_seqinfo = read_fasta.SeqFileInfo(self.x_seqfile)
+        # y_seqinfo = read_fasta.SeqFileInfo(self.y_seqfile)
 
-        seqs = comsubseq.read_comsubseq_file(self.cs_result_bin)
+        # seqs = comsubseq.read_comsubseq_file(self.cs_result_bin)
 
-        human_output_path = utility.make_temp_path("human_output.txt")
+        # human_output_path = utility.make_temp_path("human_output.txt")
 
-        report.make_human_report(x_seqinfo, y_seqinfo, seqs, human_output_path)
+        # report.make_human_report(x_seqinfo, y_seqinfo, seqs, human_output_path)
 
-    def test_make_machine_report(self):
-        x_seqinfo = read_fasta.SeqFileInfo(self.x_seqfile)
-        y_seqinfo = read_fasta.SeqFileInfo(self.y_seqfile)
+    # def test_make_machine_report(self):
+        # x_seqinfo = read_fasta.SeqFileInfo(self.x_seqfile)
+        # y_seqinfo = read_fasta.SeqFileInfo(self.y_seqfile)
 
-        seqs = comsubseq.read_comsubseq_file(self.cs_result_bin)
+        # seqs = comsubseq.read_comsubseq_file(self.cs_result_bin)
 
-        human_output_path = utility.make_temp_path("machine_output.txt")
+        # human_output_path = utility.make_temp_path("machine_output.txt")
 
-        report.make_machine_report(x_seqinfo, y_seqinfo, seqs, human_output_path)
+        # report.make_machine_report(x_seqinfo, y_seqinfo, seqs, human_output_path)

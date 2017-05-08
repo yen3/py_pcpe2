@@ -1,11 +1,11 @@
 import unittest
-import os
 import os.path
 
-import test.env
-
-from pypcpe2 import read_fasta
 from pypcpe2.env import env
+from pypcpe2 import read_fasta
+from pypcpe2 import utility
+
+import test.env
 
 
 def compare_sorted_file_content(x_path, y_path):
@@ -18,83 +18,36 @@ def compare_sorted_file_content(x_path, y_path):
         return xlines == ylines
 
 
-class TestReadFASTA(unittest.TestCase):
+class TestCore(unittest.TestCase):
     def setUp(self):
-        self.test_data_folder = test.env.test_data_folder
-        self.test_output_folder = test.env.test_output_folder
+        self.test_data_folder = os.path.join(test.env.test_data_folder,
+                                             "read_fasta")
+        self.test_output_folder = os.path.join(test.env.test_output_folder,
+                                               "read_fasta")
+        if not os.path.isdir(self.test_output_folder):
+            os.makedirs(self.test_output_folder)
 
-        self.seqfile1 = read_fasta.SeqFile(
+        self.fasta_seq_path1 = read_fasta.FastaSeqPath(
             os.path.join(self.test_data_folder, "test1.txt"),
             seq_path=os.path.join(self.test_data_folder, "test1_seq.txt"),
-            id_path=os.path.join(self.test_data_folder, "test1_id.txt"),
-            id_info_path=os.path.join(self.test_data_folder,
+            fasta_id_path=os.path.join(self.test_data_folder, "test1_id.txt"),
+            fasta_id_info_path=os.path.join(self.test_data_folder,
                                       "test1_id_info.txt"))
 
-        self.seqfile2 = read_fasta.SeqFile(
+        self.fasta_seq_path2 = read_fasta.FastaSeqPath(
             os.path.join(self.test_data_folder, "test2.txt"),
             seq_path=os.path.join(self.test_data_folder, "test2_seq.txt"),
-            id_path=os.path.join(self.test_data_folder, "test2_id.txt"),
-            id_info_path=os.path.join(self.test_data_folder,
+            fasta_id_path=os.path.join(self.test_data_folder, "test2_id.txt"),
+            fasta_id_info_path=os.path.join(self.test_data_folder,
                                       "test2_id_info.txt"))
 
         self.saved_temp_path = env().temp_path
         env().temp_path = self.test_output_folder
         self.temp_path = env().temp_path
 
+
     def tearDown(self):
         env().temp_path = self.saved_temp_path
-
-    def test_env(self):
-        self.assertTrue(os.path.isdir(self.test_data_folder))
-        self.assertTrue(os.path.isdir(self.test_output_folder))
-
-    def test_seq_file_object_create_seq1(self):
-        seqfile = read_fasta.SeqFile(self.seqfile1.fasta_path)
-        self.assertEqual(seqfile.fasta_path, self.seqfile1.fasta_path)
-
-        ans_seq_path = os.path.join(self.test_output_folder, "test1_seq.txt")
-        ans_id_path = os.path.join(self.test_output_folder, "test1_id.txt")
-        ans_id_info_path = os.path.join(self.test_output_folder,
-                                        "test1_id_info.txt")
-
-        self.assertEqual(seqfile.seq_path, ans_seq_path)
-        self.assertEqual(seqfile.id_path, ans_id_path)
-        self.assertEqual(seqfile.id_info_path, ans_id_info_path)
-
-    def test_seq_file_object_create_seq2(self):
-        seqfile = read_fasta.SeqFile(self.seqfile2.fasta_path)
-        self.assertEqual(seqfile.fasta_path, self.seqfile2.fasta_path)
-
-        ans_seq_path = os.path.join(self.test_output_folder, "test2_seq.txt")
-        ans_id_path = os.path.join(self.test_output_folder, "test2_id.txt")
-        ans_id_info_path = os.path.join(self.test_output_folder,
-                                        "test2_id_info.txt")
-
-        self.assertEqual(seqfile.seq_path, ans_seq_path)
-        self.assertEqual(seqfile.id_path, ans_id_path)
-        self.assertEqual(seqfile.id_info_path, ans_id_info_path)
-
-    def test_seq_file_parsing_seq1(self):
-        seqfile = read_fasta.create_seq_file(self.seqfile1.fasta_path)
-
-        self.assertTrue(compare_sorted_file_content(seqfile.seq_path,
-                                                    self.seqfile1.seq_path))
-        self.assertTrue(compare_sorted_file_content(seqfile.id_path,
-                                                    self.seqfile1.id_path))
-        self.assertTrue(
-            compare_sorted_file_content(seqfile.id_info_path,
-                                        self.seqfile1.id_info_path))
-
-    def test_seq_file_parsing_seq2(self):
-        seqfile = read_fasta.create_seq_file(self.seqfile2.fasta_path)
-
-        self.assertTrue(compare_sorted_file_content(seqfile.seq_path,
-                                                    self.seqfile2.seq_path))
-        self.assertTrue(compare_sorted_file_content(seqfile.id_path,
-                                                    self.seqfile2.id_path))
-        self.assertTrue(
-            compare_sorted_file_content(seqfile.id_info_path,
-                                        self.seqfile2.id_info_path))
 
     def test_retrieve_fasta_id(self):
         id_line1 = ">gi|9999999999|gb|AOS87590|pypcpe2 test sequence1"
@@ -106,7 +59,7 @@ class TestReadFASTA(unittest.TestCase):
 
     def test_read_fasta_file_seq1(self):
         fs = [fasta for fasta in
-              read_fasta.read_fasta_file(self.seqfile1.fasta_path)]
+              read_fasta.read_fasta_file(self.fasta_seq_path1.raw_path)]
 
         ans = [('>gi|9999999999|gb|AOS87590|pypcpe2 test sequence1',
                 'ABCDEFG'),
@@ -125,7 +78,7 @@ class TestReadFASTA(unittest.TestCase):
 
     def test_read_fasta_file_seq2(self):
         fs = [fasta for fasta in
-              read_fasta.read_fasta_file(self.seqfile2.fasta_path)]
+              read_fasta.read_fasta_file(self.fasta_seq_path2.raw_path)]
 
         ans = [('>gi|9999999993|gb|AOS87590|pypcpe2 test sequence7', 'BCDEFG'),
                ('>gi|9999999992|gb|AOS87590|pypcpe2 test sequence8', 'BCDEFG'),
@@ -137,163 +90,80 @@ class TestReadFASTA(unittest.TestCase):
 
         self.assertEqual(ans, fs)
 
-    def test_create_id_info_file_seq1(self):
-        fasta_path = self.seqfile1.fasta_path
-        ans_path = self.seqfile1.id_info_path
+    def test_create_fasta_id_info_file_seq1(self):
+        fasta_path = self.fasta_seq_path1.raw_path
+        ans_path = self.fasta_seq_path1.fasta_id_info_path
         info_path = os.path.join(self.test_data_folder, 'test1_id_info.txt')
 
-        read_fasta.create_id_info_file(fasta_path, info_path)
+        read_fasta.create_fasta_id_info_file(fasta_path, info_path)
 
         with open(ans_path) as f_ans, open(info_path) as f_info:
             self.assertEqual(f_ans.read(), f_info.read())
 
-    def test_create_id_info_file_seq2(self):
-        fasta_path = self.seqfile2.fasta_path
-        ans_path = self.seqfile2.id_info_path
+    def test_create_fasta_id_info_file_seq2(self):
+        fasta_path = self.fasta_seq_path2.raw_path
+        ans_path = self.fasta_seq_path2.fasta_id_info_path
         info_path = os.path.join(self.test_data_folder, 'test2_id_info.txt')
 
-        read_fasta.create_id_info_file(fasta_path, info_path)
+        read_fasta.create_fasta_id_info_file(fasta_path, info_path)
 
         with open(ans_path) as f_ans, open(info_path) as f_info:
             self.assertEqual(f_ans.read(), f_info.read())
 
     def test_create_seq_id_file_seq1(self):
-        fasta_path = self.seqfile1.fasta_path
-        ans_seq_path = self.seqfile1.seq_path
-        ans_id_path = self.seqfile1.id_path
+        fasta_path = self.fasta_seq_path1.raw_path
+        ans_seq_path = self.fasta_seq_path1.seq_path
+        ans_id_path = self.fasta_seq_path1.fasta_id_path
 
         seq_path = os.path.join(self.test_output_folder, 'test1_seq.txt')
         id_path = os.path.join(self.test_output_folder, 'test1_id.txt')
 
-        read_fasta.create_seq_id_file(fasta_path, seq_path, id_path)
+        read_fasta.create_seq_fasta_id_file(fasta_path, seq_path, id_path)
 
         # Compare with answer
         self.assertTrue(compare_sorted_file_content(ans_seq_path, seq_path))
         self.assertTrue(compare_sorted_file_content(ans_id_path, id_path))
 
     def test_create_seq_id_file_seq2(self):
-        fasta_path = self.seqfile2.fasta_path
-        ans_seq_path = self.seqfile2.seq_path
-        ans_id_path = self.seqfile2.id_path
+        fasta_path = self.fasta_seq_path2.raw_path
+        ans_seq_path = self.fasta_seq_path2.seq_path
+        ans_id_path = self.fasta_seq_path2.fasta_id_path
 
         seq_path = os.path.join(self.test_output_folder, 'test2_seq.txt')
         id_path = os.path.join(self.test_output_folder, 'test2_id.txt')
 
-        read_fasta.create_seq_id_file(fasta_path, seq_path, id_path)
+        read_fasta.create_seq_fasta_id_file(fasta_path, seq_path, id_path)
 
         # Compare with answer
         self.assertTrue(compare_sorted_file_content(ans_seq_path, seq_path))
         self.assertTrue(compare_sorted_file_content(ans_id_path, id_path))
 
-    def test_read_fasta_id_info_seq1(self):
-        id_info = read_fasta.read_id_info_file(self.seqfile1.id_info_path)
+    def test_fasta_seq_path_object_create1(self):
+        fasta_seq_path = read_fasta.FastaSeqPath(self.fasta_seq_path1.raw_path)
 
-        ans = {'9999999999':
-               '>gi|9999999999|gb|AOS87590|pypcpe2 test sequence1',
-               '9999999998':
-               '>gi|9999999998|gb|AOS87590|pypcpe2 test sequence2',
-               '9999999997':
-               '>gi|9999999997|gb|AOS87590|pypcpe2 test sequence3',
-               '9999999996':
-               '>gi|9999999996|gb|AOS87590|pypcpe2 test sequence4',
-               '9999999995':
-               '>gi|9999999995|gb|AOS87590|pypcpe2 test sequence5',
-               '9999999994':
-               '>gi|9999999994|gb|AOS87590|pypcpe2 test sequence6'}
+        ans_raw_path = os.path.join(self.test_data_folder, "test1.txt")
+        ans_seq_path = os.path.join(self.test_output_folder, "test1_seq.txt")
+        ans_fasta_id_path = os.path.join(self.test_output_folder, "test1_id.txt")
+        ans_fasta_id_info_path = os.path.join(self.test_output_folder,
+                                        "test1_id_info.txt")
 
-        self.assertEqual(id_info, ans)
+        self.assertEqual(fasta_seq_path.raw_path, ans_raw_path)
+        self.assertEqual(fasta_seq_path.seq_path, ans_seq_path)
+        self.assertEqual(fasta_seq_path.fasta_id_path, ans_fasta_id_path)
+        self.assertEqual(fasta_seq_path.fasta_id_info_path,
+                         ans_fasta_id_info_path)
 
-    def test_read_fasta_id_info_seq2(self):
-        id_info = read_fasta.read_id_info_file(self.seqfile2.id_info_path)
+    def test_fasta_seq_path_object_create2(self):
+        fasta_seq_path = read_fasta.FastaSeqPath(self.fasta_seq_path2.raw_path)
 
-        ans = {'9999999993':
-               '>gi|9999999993|gb|AOS87590|pypcpe2 test sequence7',
-               '9999999992':
-               '>gi|9999999992|gb|AOS87590|pypcpe2 test sequence8',
-               '9999999991':
-               '>gi|9999999991|gb|AOS87590|pypcpe2 test sequence9',
-               '9999999990':
-               '>gi|9999999990|gb|AOS87590|pypcpe2 test sequence10',
-               '9999999989':
-               '>gi|9999999989|gb|AOS87590|pypcpe2 test sequence11'}
+        ans_raw_path = os.path.join(self.test_data_folder, "test2.txt")
+        ans_seq_path = os.path.join(self.test_output_folder, "test2_seq.txt")
+        ans_fasta_id_path = os.path.join(self.test_output_folder, "test2_id.txt")
+        ans_fasta_id_info_path = os.path.join(self.test_output_folder,
+                                        "test2_id_info.txt")
 
-        self.assertEqual(id_info, ans)
-
-    def test_read_seq_id_files_seq1(self):
-        seq_info = read_fasta.read_seq_id_files(
-            self.seqfile1.seq_path, self.seqfile1.id_path)
-        seq_info.sort(key=lambda si:si.seq)
-
-        ans = [read_fasta.SeqInfo(seq='ABCDEFG', ids=['9999999999']),
-               read_fasta.SeqInfo(seq='ABCDEFGH',
-                                  ids=['9999999998', '9999999997',
-                                       '9999999996']),
-               read_fasta.SeqInfo(seq='ABCDEFGHI',
-                                  ids=['9999999995', '9999999994'])]
-
-        self.assertEqual(seq_info, ans)
-
-    def test_read_seq_id_files_seq2(self):
-        seq_info = read_fasta.read_seq_id_files(
-            self.seqfile2.seq_path, self.seqfile2.id_path)
-        seq_info.sort(key=lambda si:si.seq)
-        ans = [read_fasta.SeqInfo(seq='BCDEFG',
-                                  ids=['9999999993', '9999999992']),
-               read_fasta.SeqInfo(seq='CDEFGHI',
-                                  ids=['9999999991', '9999999990',
-                                       '9999999989'])]
-
-        self.assertEqual(seq_info, ans)
-
-    def test_create_seq_file_info_object_seq1(self):
-        seq_info = read_fasta.SeqFileInfo(self.seqfile1)
-
-        info_ans = {'9999999999':
-                '>gi|9999999999|gb|AOS87590|pypcpe2 test sequence1',
-                '9999999998':
-                '>gi|9999999998|gb|AOS87590|pypcpe2 test sequence2',
-                '9999999997':
-                '>gi|9999999997|gb|AOS87590|pypcpe2 test sequence3',
-                '9999999996':
-                '>gi|9999999996|gb|AOS87590|pypcpe2 test sequence4',
-                '9999999995':
-                '>gi|9999999995|gb|AOS87590|pypcpe2 test sequence5',
-                '9999999994':
-                '>gi|9999999994|gb|AOS87590|pypcpe2 test sequence6'}
-
-        seq_ans = [read_fasta.SeqInfo(seq='ABCDEFG', ids=['9999999999']),
-                   read_fasta.SeqInfo(seq='ABCDEFGH',
-                                      ids=['9999999998', '9999999997',
-                                           '9999999996']),
-                   read_fasta.SeqInfo(seq='ABCDEFGHI',
-                                      ids=['9999999995', '9999999994'])]
-
-
-        self.assertEqual(info_ans, seq_info.id_info)
-
-        seq_info.seq_info.sort()
-        self.assertEqual(seq_ans, seq_info.seq_info)
-
-    def test_create_seq_file_info_object_seq2(self):
-        seq_info = read_fasta.SeqFileInfo(self.seqfile2)
-
-        info_ans = {'9999999993':
-                    '>gi|9999999993|gb|AOS87590|pypcpe2 test sequence7',
-                    '9999999992':
-                    '>gi|9999999992|gb|AOS87590|pypcpe2 test sequence8',
-                    '9999999991':
-                    '>gi|9999999991|gb|AOS87590|pypcpe2 test sequence9',
-                    '9999999990':
-                    '>gi|9999999990|gb|AOS87590|pypcpe2 test sequence10',
-                    '9999999989':
-                    '>gi|9999999989|gb|AOS87590|pypcpe2 test sequence11'}
-        seq_ans = [read_fasta.SeqInfo(seq='BCDEFG',
-                                      ids=['9999999993', '9999999992']),
-                   read_fasta.SeqInfo(seq='CDEFGHI',
-                                      ids=['9999999991', '9999999990',
-                                           '9999999989'])]
-
-        self.assertEqual(info_ans, seq_info.id_info)
-
-        seq_info.seq_info.sort()
-        self.assertEqual(seq_ans, seq_info.seq_info)
+        self.assertEqual(fasta_seq_path.raw_path, ans_raw_path)
+        self.assertEqual(fasta_seq_path.seq_path, ans_seq_path)
+        self.assertEqual(fasta_seq_path.fasta_id_path, ans_fasta_id_path)
+        self.assertEqual(fasta_seq_path.fasta_id_info_path,
+                         ans_fasta_id_info_path)

@@ -1,86 +1,10 @@
 """
-Read/ Parse Fasta file module
-
-The module supports read fasta file and save to related data structures.
+Parsing FASTA file module.
 """
-import collections
 import os.path
+import collections
 
 from pypcpe2 import utility
-
-
-class SeqFile(object):
-    """
-    Generate and save the default seq, id and id_info path.
-    """
-    def __init__(self, fasta_path, *, seq_path=None,
-                 id_path=None, id_info_path=None):
-        """
-        Args:
-            fasta_path (str) : the input fasta file path
-        """
-        self._fasta_path = fasta_path
-
-        name = utility.retrieve_basename(self._fasta_path)
-
-        get_valid_path = lambda default_path, arg_path: \
-            os.path.abspath(arg_path) if arg_path is not None else default_path
-
-        self._seq_path = get_valid_path(
-            utility.make_temp_path(name + "_seq.txt"), seq_path)
-        self._id_path = get_valid_path(
-            utility.make_temp_path(name + "_id.txt"), id_path)
-        self._id_info_path = get_valid_path(
-            utility.make_temp_path(name + "_id_info.txt"), id_info_path)
-
-    @staticmethod
-    def parse_fasta(seqfile):
-        """
-        Parse the input fasta file to construct all files needed in the
-        following steps.
-        """
-        create_seq_id_file(seqfile.fasta_path, seqfile.seq_path, seqfile.id_path)
-        create_id_info_file(seqfile.fasta_path, seqfile.id_info_path)
-
-    @property
-    def seq_path(self):
-        return self._seq_path
-
-    @property
-    def fasta_path(self):
-        return self._fasta_path
-
-    @property
-    def id_path(self):
-        return self._id_path
-
-    @property
-    def id_info_path(self):
-        return self._id_info_path
-
-
-SeqInfo = collections.namedtuple('SeqInfo', ['seq', 'ids'])
-
-
-class SeqFileInfo(object):
-    """
-    Save all sequences's information. Construct these informations from parsed
-    files.
-    """
-    def __init__(self, seq_file):
-        self._seq_file = seq_file
-        self._seq_info = read_seq_id_files(self._seq_file.seq_path,
-                                           self._seq_file.id_path)
-        self._id_info = read_id_info_file(self._seq_file.id_info_path)
-
-    @property
-    def seq_info(self):
-        return self._seq_info
-
-    @property
-    def id_info(self):
-        return self._id_info
-
 
 
 def retrieve_fasta_id(id_line):
@@ -120,29 +44,7 @@ def read_fasta_file(path):
         yield id_line.strip(), seq.strip()
 
 
-def create_id_info_file(fasta_path, info_path):
-    """
-    Parse fasta file to make a fasta id information file.
-
-    The output file format is as the following.
-
-        [FASTA ID_0] [INFO_0]
-        [FASTA ID_1] [INFO_1]
-        ...
-        [FASTA ID_n] [INFO_n]
-
-    Args:
-        fasta_path (str): The input fasta file
-        info_path (str): The output fasta information file.
-    """
-    with open(info_path, 'w') as fout:
-        for info, _ in read_fasta_file(fasta_path):
-            fasta_id = retrieve_fasta_id(info)
-
-            fout.write(" ".join([fasta_id, info]) + "\n")
-
-
-def create_seq_id_file(fasta_path, seq_path, id_path):
+def create_seq_fasta_id_file(fasta_path, seq_path, id_path):
     """
     Parse fasta file to make a unique sequence file and a id mapping file.
 
@@ -189,69 +91,187 @@ def create_seq_id_file(fasta_path, seq_path, id_path):
             f_id.write(" ".join([str(i) for i in write_ids]) + "\n")
 
 
-def read_id_info_file(id_info_path):
+def create_fasta_id_info_file(fasta_path, info_path):
     """
-    Create a dictionary to save the information for each fasta id.
+    Parse fasta file to make a fasta id information file.
+
+    The output file format is as the following.
+
+        [FASTA ID_0] [INFO_0]
+        [FASTA ID_1] [INFO_1]
+        ...
+        [FASTA ID_n] [INFO_n]
 
     Args:
-        id_info_path (str): the input file path
-
-    Return:
-        a dictionary
-            key (str) presents fasta id.
-            value (str) presents fasta information.
+        fasta_path (str): The input fasta file
+        info_path (str): The output fasta information file.
     """
-    id_info = dict()
+    with open(info_path, 'w') as fout:
+        for info, _ in read_fasta_file(fasta_path):
+            fasta_id = retrieve_fasta_id(info)
 
-    with open(id_info_path, 'r') as fin:
-        for line in fin:
-            words = line.split()
+            fout.write(" ".join([fasta_id, info]) + "\n")
 
-            fasta_id = words[0]
-            fasta_info = " ".join(words[1:])
-            id_info[fasta_id] = fasta_info
 
-    return id_info
-
-def read_seq_id_files(seq_path, id_path):
+class FastaSeqPath(object):
     """
-    Create a list to save the sequence and fasta ids.
-
-    It's possible a unique seqeucne to map several fasta ids.
-
-    Args:
-        seq_path (str): the input sequence file path
-        id_path (str): the input ids file path
-
-    Return:
-        A list of SeqInfo.
-        Each element of the list present
-            seq (str) : the sequence
-            ids ([str]) : a list of fasta ids
+    Present all file paths for the fasta file.
     """
-    seq_info = list()
+    def __init__(self, raw_path, *, seq_path=None,
+                 fasta_id_path=None, fasta_id_info_path=None):
+        """
+        Init the object.
 
-    with open(seq_path, 'r') as fseq, open(id_path, 'r') as fid:
-        seq_lines = fseq.read().splitlines()[1:]
-        id_lines = fid.read().splitlines()[1:]
+        The object records all path information. It would create the related
+        data strucutre.
 
-        for seq_line, ids_line in zip(seq_lines, id_lines):
-            seq = seq_line.split()[1]
-            ids = ids_line.split()[1:]
+        If the argument is None, the object will have a default path. The path
+        is under temp folder. If you have these files, please specify them.
+        """
+        self._raw_path = os.path.abspath(raw_path)
+        name = utility.retrieve_basename(self._raw_path)
 
-            seq_info.append(SeqInfo(seq, ids))
+        get_valid_path = lambda default_path, arg_path: \
+            os.path.abspath(arg_path) if arg_path is not None else default_path
 
-    return seq_info
+        self._seq_path = get_valid_path(
+            utility.make_temp_path(name + "_seq.txt"), seq_path)
+        self._fasta_id_path = get_valid_path(
+            utility.make_temp_path(name + "_id.txt"), fasta_id_path)
+        self._fasta_id_info_path = get_valid_path(
+            utility.make_temp_path(name + "_id_info.txt"), fasta_id_info_path)
+
+    @property
+    def raw_path(self):
+        return self._raw_path
+
+    @property
+    def seq_path(self):
+        return self._seq_path
+
+    @property
+    def fasta_id_path(self):
+        return self._fasta_id_path
+
+    @property
+    def fasta_id_info_path(self):
+        return self._fasta_id_info_path
 
 
-def create_seq_file(fasta_path):
+Sequence = collections.namedtuple('Sequence', ['raw_seq', 'ids'])
+
+
+class Sequences(object):
     """
-    Create SeqFile object and create the files.
+    Present each sequences'info. A dict's wrapper
+        key (int) presents the sequence id
+        value (Sequence) presents the sequence information
+            raw_seq presents the orignal seqeuence
+            ids present the fasta ids of the sequence
+    """
+    def __init__(self, seqs):
+        """
+        Users can not call the init function directly.
+        """
+        self._seqs = seqs
+
+    @staticmethod
+    def read_file(seq_path, fasta_id_path, sequence_ids=None):
+        """
+        Create a dict to save the sequence and fasta ids.
+
+        It's possible a unique seqeucne to map several fasta ids.
+
+        Args:
+            seq_path (str): the input sequence file path
+            id_path (str): the input ids file path
+            sequence_ids ([int]):  a list of sequence ids.
+                If the parameter is None, it save all sequences from
+                these files. Otherwise it only saves sequences which sequence
+                ids appear in the list.
+
+        Return:
+            A Sequences object
+        """
+        return None
+
+class FastaIDInfos(object):
+    """
+    Present each fasta id's information. A dict's wrapper.
+        key (str) presents fasta id.
+        value (str) presents fasta information.
+    """
+    def __init__(self, id_info):
+        """
+        Users can not call the init function directly.
+        """
+        self._id_info = id_info
+
+    @staticmethod
+    def read_file(path, fasta_ids=None):
+        """
+        Create a dictionary to save the information for each fasta id.
+
+        Args:
+            id_info_path (str): the input file path
+            fasta_ids ([str]):  a list of fasta ids.
+                If the parameter is None, it save all fasta id informations from
+                the file. Otherwise it only saves information which fasta ids
+                appear in the list.
+
+        Return:
+            a FastaIDinfos object.
+        """
+        id_info = dict()
+        with open(path, 'r') as fin:
+            for line in fin:
+                words = line.split()
+
+                fasta_id = words[0]
+                fasta_info = " ".join(words[1:])
+                id_info[fasta_id] = fasta_info
+
+        return FastaIDInfos(id_info)
+
+
+class FastaSeq(object):
+    """
+    A small helper class to collect two major FASTA data structures.
+    """
+    def __init__(self, fasta_seq_path, *, seqence_ids=None, fasta_ids=None):
+        self._seqs = Sequences.read_file(fasta_seq_path.seq_path,
+                                         fasta_seq_path.fasta_id_path,
+                                         sequence_ids)
+        self._fasta_id_infos = FastaIDInfos.read_file(
+            fasta_seq_path.fasta_id_info_path, fasta_ids)
+
+    @property
+    def seqs(self):
+        return self._seqs
+
+    @property
+    def fasta_id_infos(self):
+        return self._fasta_id_infos
+
+
+def parse_fasta_file(path):
+    """
+    Parsing the input FASTA file to create related data structures.
 
     Args:
         fasta_path (str): the input fasta file path
-    """
-    seq_file = SeqFile(fasta_path)
-    SeqFile.parse_fasta(seq_file)
 
-    return seq_file
+    Return:
+        a FastaSeqPath object to point out the paths which contains parsed
+        infomation for the input FASTA file.
+    """
+    fasta_seq_path = FastaSeqPath(path)
+
+    create_seq_fasta_id_file(fasta_seq_path.raw_path,
+                             fasta_seq_path.seq_path,
+                             fasta_seq_path.fasta_id_path)
+    create_fasta_id_info_file(fasta_seq_path.raw_path,
+                              fasta_seq_path.fasta_id_info_path)
+
+    return fasta_seq_path
+

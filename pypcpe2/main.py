@@ -14,10 +14,10 @@ def main():
     output_path = "./output_test"
     human_output_path = "./output_test_human"
 
-    x_seqfile = read_fasta.create_seq_file(x_seq_path)
-    y_seqfile = read_fasta.create_seq_file(y_seq_path)
+    x = read_fasta.parse_fasta_file(x_seq_path)
+    y = read_fasta.parse_fasta_file(y_seq_path)
 
-    seq_result = core.compare_seqs(x_seqfile.seq_path, y_seqfile.seq_path)
+    comsubseq_path = core.compare_seqs(x.seq_path, y.seq_path)
 
-    report.make_report(x_seqfile, y_seqfile, seq_result,
+    report.make_report(x, y, comsubseq_path,
                        output_path, human_output_path)
