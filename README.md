@@ -7,6 +7,7 @@
   * It supports large number of seqeucnes comparasion (>= 100000).
   * The project wraps [pcpe2](https://github.com/yen3/pcpe2) as a python module.
     to speedup the compare time.
+* The original design is from Professor [Guang-Wu Chen](http://rcevi.cgu.edu.tw/files/14-1065-4045,r639-1.php).
 
 ## Requirement
 
