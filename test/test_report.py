@@ -17,18 +17,18 @@ class TestReport(unittest.TestCase):
         if not os.path.isdir(self.test_output_folder):
             os.makedirs(self.test_output_folder)
 
-        self.x_seqfile = read_fasta.SeqFile(
+        self.fasta_seq_path1 = read_fasta.FastaSeqPath(
             os.path.join(self.test_data_folder, "test1.txt"),
             seq_path=os.path.join(self.test_data_folder, "test1_seq.txt"),
-            id_path=os.path.join(self.test_data_folder, "test1_id.txt"),
-            id_info_path=os.path.join(self.test_data_folder,
+            fasta_id_path=os.path.join(self.test_data_folder, "test1_id.txt"),
+            fasta_id_info_path=os.path.join(self.test_data_folder,
                                       "test1_id_info.txt"))
 
-        self.y_seqfile = read_fasta.SeqFile(
+        self.fasta_seq_path2 = read_fasta.FastaSeqPath(
             os.path.join(self.test_data_folder, "test2.txt"),
             seq_path=os.path.join(self.test_data_folder, "test2_seq.txt"),
-            id_path=os.path.join(self.test_data_folder, "test2_id.txt"),
-            id_info_path=os.path.join(self.test_data_folder,
+            fasta_id_path=os.path.join(self.test_data_folder, "test2_id.txt"),
+            fasta_id_info_path=os.path.join(self.test_data_folder,
                                       "test2_id_info.txt"))
 
         self.cs_result_bin = os.path.join(self.test_data_folder,
@@ -40,6 +40,13 @@ class TestReport(unittest.TestCase):
 
     def tearDown(self):
         env().temp_path = self.saved_temp_path
+
+    def test_make_report(self):
+        output_path = utility.make_temp_path("machine_output.txt")
+        human_output_path = utility.make_temp_path("human_output.txt")
+
+        report.make_report(self.fasta_seq_path1, self.fasta_seq_path2,
+                           self.cs_result_bin, output_path, human_output_path)
 
     # def test_make_human_report(self):
         # x_seqinfo = read_fasta.SeqFileInfo(self.x_seqfile)
