@@ -212,7 +212,7 @@ class Sequences(collections.abc.Mapping):
             id_lines = fid.read().splitlines()[1:]
 
             for sid, (seq_line, ids_line) in enumerate(
-                zip(seq_lines, id_lines)):
+                    zip(seq_lines, id_lines)):
                 if sequence_ids is None or sid in sequence_ids:
                     raw_seq = seq_line.split()[1]
                     fasta_ids = ids_line.split()[1:]
@@ -278,10 +278,26 @@ class FastaSeq(object):
     """
     A small helper class to collect two major fasta data structures.
     """
-    def __init__(self, fasta_seq_path, *, sequence_ids=None, fasta_ids=None):
+    def __init__(self, fasta_seq_path, *, sequence_ids=None):
+        """
+        Init two fasta data structures by reading file.
+
+        Args:
+            fasta_seq_path (FastaSeqPath): the input file paths
+            sequence_ids ([int]):  a list of sequence ids.
+                If the parameter is None, it save all sequences from
+                these files. Otherwise it only saves sequences which sequence
+                ids appear in the list.
+        """
         self._seqs = Sequences.read_file(fasta_seq_path.seq_path,
                                          fasta_seq_path.fasta_id_path,
                                          sequence_ids)
+        fasta_ids = None
+        if sequence_ids is not None:
+            fasta_ids = {fasta_id
+                         for seq in self._seqs.values()
+                         for fasta_id in seq.fasta_ids}
+
         self._fasta_id_infos = FastaIDInfos.read_file(
             fasta_seq_path.fasta_id_info_path, fasta_ids)
 

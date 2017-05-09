@@ -351,3 +351,33 @@ class TestCore(unittest.TestCase):
         fs = read_fasta.FastaSeq(self.fasta_seq_path2)
         self.assertEqual(fs.seqs, seqs_ans)
         self.assertEqual(fs.fasta_id_infos, fasta_id_infos_ans)
+
+    def test_create_fasta_seq_object_with_sequence_ids_1(self):
+        seqs_ans = {
+               0: read_fasta.Sequence(raw_seq='ABCDEFG',
+                                      fasta_ids=['9999999999']),
+               2: read_fasta.Sequence(raw_seq='ABCDEFGHI',
+                                      fasta_ids=['9999999995',
+                                                 '9999999994'])}
+        fasta_id_infos_ans = {
+            '9999999999': '>gi|9999999999|gb|AOS87590|pypcpe2 test sequence1',
+            '9999999995': '>gi|9999999995|gb|AOS87590|pypcpe2 test sequence5',
+            '9999999994': '>gi|9999999994|gb|AOS87590|pypcpe2 test sequence6'}
+
+        fs = read_fasta.FastaSeq(self.fasta_seq_path1, sequence_ids={0, 2})
+        self.assertEqual(fs.seqs, seqs_ans)
+        self.assertEqual(fs.fasta_id_infos, fasta_id_infos_ans)
+
+    def test_create_fasta_seq_object_with_sequence_ids_2(self):
+        seqs_ans = {
+            1: read_fasta.Sequence(raw_seq='CDEFGHI',
+                                   fasta_ids=['9999999991', '9999999990',
+                                              '9999999989'])}
+        fasta_id_infos_ans = {
+            '9999999991': '>gi|9999999991|gb|AOS87590|pypcpe2 test sequence9',
+            '9999999990': '>gi|9999999990|gb|AOS87590|pypcpe2 test sequence10',
+            '9999999989': '>gi|9999999989|gb|AOS87590|pypcpe2 test sequence11'}
+
+        fs = read_fasta.FastaSeq(self.fasta_seq_path2, sequence_ids={1})
+        self.assertEqual(fs.seqs, seqs_ans)
+        self.assertEqual(fs.fasta_id_infos, fasta_id_infos_ans)
