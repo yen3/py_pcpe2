@@ -1,0 +1,68 @@
+6 BCDEFG
+x: 9999999999
+x_loc: 1
+y: 9999999993 9999999992
+y_loc: 0
+
+[x0 - 9999999999]: >gi|9999999999|gb|AOS87590|pypcpe2 test sequence1
+
+[y0 - 9999999993]: >gi|9999999993|gb|AOS87590|pypcpe2 test sequence7
+[y1 - 9999999992]: >gi|9999999992|gb|AOS87590|pypcpe2 test sequence8
+
+==================================================
+6 BCDEFG
+x: 9999999998 9999999997 9999999996
+x_loc: 1
+y: 9999999993 9999999992
+y_loc: 0
+
+[x0 - 9999999998]: >gi|9999999998|gb|AOS87590|pypcpe2 test sequence2
+[x1 - 9999999997]: >gi|9999999997|gb|AOS87590|pypcpe2 test sequence3
+[x2 - 9999999996]: >gi|9999999996|gb|AOS87590|pypcpe2 test sequence4
+
+[y0 - 9999999993]: >gi|9999999993|gb|AOS87590|pypcpe2 test sequence7
+[y1 - 9999999992]: >gi|9999999992|gb|AOS87590|pypcpe2 test sequence8
+
+==================================================
+6 CDEFGH
+x: 9999999998 9999999997 9999999996
+x_loc: 2
+y: 9999999991 9999999990 9999999989
+y_loc: 0
+
+[x0 - 9999999998]: >gi|9999999998|gb|AOS87590|pypcpe2 test sequence2
+[x1 - 9999999997]: >gi|9999999997|gb|AOS87590|pypcpe2 test sequence3
+[x2 - 9999999996]: >gi|9999999996|gb|AOS87590|pypcpe2 test sequence4
+
+[y0 - 9999999991]: >gi|9999999991|gb|AOS87590|pypcpe2 test sequence9
+[y1 - 9999999990]: >gi|9999999990|gb|AOS87590|pypcpe2 test sequence10
+[y2 - 9999999989]: >gi|9999999989|gb|AOS87590|pypcpe2 test sequence11
+
+==================================================
+6 BCDEFG
+x: 9999999995 9999999994
+x_loc: 1
+y: 9999999993 9999999992
+y_loc: 0
+
+[x0 - 9999999995]: >gi|9999999995|gb|AOS87590|pypcpe2 test sequence5
+[x1 - 9999999994]: >gi|9999999994|gb|AOS87590|pypcpe2 test sequence6
+
+[y0 - 9999999993]: >gi|9999999993|gb|AOS87590|pypcpe2 test sequence7
+[y1 - 9999999992]: >gi|9999999992|gb|AOS87590|pypcpe2 test sequence8
+
+==================================================
+7 CDEFGHI
+x: 9999999995 9999999994
+x_loc: 2
+y: 9999999991 9999999990 9999999989
+y_loc: 0
+
+[x0 - 9999999995]: >gi|9999999995|gb|AOS87590|pypcpe2 test sequence5
+[x1 - 9999999994]: >gi|9999999994|gb|AOS87590|pypcpe2 test sequence6
+
+[y0 - 9999999991]: >gi|9999999991|gb|AOS87590|pypcpe2 test sequence9
+[y1 - 9999999990]: >gi|9999999990|gb|AOS87590|pypcpe2 test sequence10
+[y2 - 9999999989]: >gi|9999999989|gb|AOS87590|pypcpe2 test sequence11
+
+==================================================

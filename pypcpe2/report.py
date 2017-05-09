@@ -29,6 +29,15 @@ class Record(object):
             fid: y_fasta_seq.fasta_id_infos[fid]
             for fid in y_fasta_seq.seqs[css.y].fasta_ids}
 
+    def __repr__(self):
+        s = ("Record(raw_seq=\"{raw_seq}\", "
+             "raw_seq_length={raw_seq_length}, "
+             "x_loc={x_loc}, y_loc={y_loc}, "
+             "x_fasta_id_infos={x_fasta_id_infos}, "
+             "y_fasta_id_infos={y_fasta_id_infos})")
+
+        return s.format(**self.__dict__)
+
 
 class Reporter(object):
     """
