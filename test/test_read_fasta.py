@@ -18,7 +18,7 @@ def compare_sorted_file_content(x_path, y_path):
         return xlines == ylines
 
 
-class TestCore(unittest.TestCase):
+class TestReadFasta(unittest.TestCase):
     def setUp(self):
         self.test_data_folder = os.path.join(test.env.test_data_folder,
                                              "read_fasta")
