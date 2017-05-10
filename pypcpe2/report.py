@@ -3,6 +3,8 @@ Generate final report for maximum common subsequences
 
 Users could call `make_report` function to generate report.
 """
+import logging
+
 from pypcpe2 import read_fasta
 from pypcpe2 import comsubseq
 
@@ -46,12 +48,21 @@ class Reporter(object):
     def __init__(self, x_fasta_seq_path, y_fasta_seq_path,
                  comsubseq_path):
         comsubseqs = comsubseq.read_comsubseq_file(comsubseq_path)
+        logging.info("There are {size} distinct common comsubsequences.".format(
+            size=len(comsubseqs)))
 
         x_sids = {css.x for css in comsubseqs}
         x_fasta_seq = read_fasta.FastaSeq(x_fasta_seq_path, sequence_ids=x_sids)
 
         y_sids = {css.y for css in comsubseqs}
         y_fasta_seq = read_fasta.FastaSeq(y_fasta_seq_path, sequence_ids=y_sids)
+
+        logging.info(("Comomon subsequences is from {x_size} sequences "
+                      "in {x_path}.").format(x_path=x_fasta_seq_path.raw_path,
+                                             x_size=len(x_sids)))
+        logging.info(("Comomon subsequences is from {y_size} sequences "
+                      "in {y_path}.").format(y_path=y_fasta_seq_path.raw_path,
+                                             y_size=len(y_sids)))
 
         self.records = [Record(css, x_fasta_seq, y_fasta_seq)
                         for css in comsubseqs]
@@ -165,7 +176,7 @@ class Reporter(object):
 
 
 def make_report(x_fasta_seq_path, y_fasta_seq_path, comsubseq_path,
-                output_path, human_output_path):
+                output_path, human_output_path=None):
     """
     Generate report for maximum common subsequences
 
@@ -179,4 +190,6 @@ def make_report(x_fasta_seq_path, y_fasta_seq_path, comsubseq_path,
     reporter = Reporter(x_fasta_seq_path, y_fasta_seq_path, comsubseq_path)
 
     reporter.make_report(output_path)
-    reporter.make_human_report(human_output_path)
+
+    if human_output_path is not None:
+        reporter.make_human_report(human_output_path)

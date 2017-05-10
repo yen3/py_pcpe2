@@ -24,13 +24,12 @@ def main():
     logging.info("Parse the input fasta files")
     x = read_fasta.parse_fasta_file(x_seq_path)
     y = read_fasta.parse_fasta_file(y_seq_path)
-    logging.info("Done - parse the input fasta files")
 
     logging.info("Find the maximum common subsequence")
     comsubseq_path = core.compare_seqs(x.seq_path, y.seq_path)
-    logging.info("Done - Find the maximum common subsequence")
 
     logging.info("Prepare the report")
     report.make_report(x, y, comsubseq_path,
                        output_path, human_output_path)
-    logging.info("Done - Prepare the report")
+
+    logging.info("Exit from the program.")
