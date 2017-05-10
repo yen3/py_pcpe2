@@ -1,15 +1,17 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
+#include <iostream>
+#include <string>
+#include <vector>
+#include <map>
+
 #include "com_subseq_sort.h"
 #include "small_seq_hash.h"
 #include "max_comsubseq.h"
 #include "env.h"
 #include "pcpe_util.h"
-
-#include <iostream>
-#include <string>
-#include <vector>
+#include "logging.h"
 
 namespace py = pybind11;
 
@@ -143,6 +145,25 @@ PYBIND11_PLUGIN(pcpe2_core) {
         R"pbdoc(
           Set the IO buffer size
         )pbdoc");
+    m.def("init_logging", [](uint32_t logging_level){
+          std::map<uint32_t, pcpe::LoggingLevel> python_logging_map;
+          python_logging_map[0] = pcpe::LoggingLevel::kNone;
+          python_logging_map[10] = pcpe::LoggingLevel::kDebug;
+          python_logging_map[20] = pcpe::LoggingLevel::kInfo;
+          python_logging_map[30] = pcpe::LoggingLevel::kWarning;
+          python_logging_map[40] = pcpe::LoggingLevel::kError;
+          python_logging_map[50] = pcpe::LoggingLevel::kFatal;
+
+          if (python_logging_map.find(logging_level) !=
+              python_logging_map.end())
+            pcpe::InitLogging(python_logging_map[logging_level]);
+          else
+            pcpe::InitLogging(pcpe::LoggingLevel::kWarning);
+        },
+        R"pbdoc(
+          Set logging level
+        )pbdoc");
+
 
     return m.ptr();
 }

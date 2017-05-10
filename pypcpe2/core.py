@@ -2,6 +2,10 @@
 Wrapper for pcpe_core external module.
 
 """
+import logging
+import os
+
+from pypcpe2 import comsubseq
 from pypcpe2 import utility
 
 import pcpe2_core
@@ -49,5 +53,8 @@ def compare_seqs(x_seq_path, y_seq_path):
     max_seq_paths = max_sorted_comsubsq_files(sorted_paths)
     output_path = utility.make_temp_path("cs_result.bin")
     utility.merge_file(max_seq_paths, output_path)
+
+    logging.info("There are {size} available commom subsequence(s).".format(
+        size=(os.path.getsize(output_path) // 20)))
 
     return output_path

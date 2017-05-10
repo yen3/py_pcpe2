@@ -3,6 +3,7 @@ Parsing fasta file module.
 """
 import os.path
 import collections
+import logging
 
 from pypcpe2 import utility
 
@@ -89,6 +90,9 @@ def create_seq_fasta_id_file(fasta_path, seq_path, id_path):
 
             write_ids = [len(ids)] + ids
             f_id.write(" ".join([str(i) for i in write_ids]) + "\n")
+
+    logging.info("Parse {path} - {seq_size} distinct sequence(s)".format(
+        path=fasta_path, seq_size=len(seq_ids)))
 
 
 def create_fasta_id_info_file(fasta_path, info_path):
