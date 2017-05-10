@@ -1,8 +1,6 @@
-import multiprocessing
-import os
 import os.path
 import logging
-import enum
+import argparse
 
 import pcpe2_core
 
@@ -96,3 +94,42 @@ def init_logging(*, log_path=None, level=logging.WARNING):
     # Apply the setting
     logging.basicConfig(filename=None, level=level, format=format_str)
     pcpe2_core.init_logging(level)
+
+
+def parse_command_args(sys_argv):
+    setting = dict()
+    return setting
+
+
+def init_env(sys_argv):
+    """
+    Read command argument and init the program environment.
+
+    The function inits all environment variables  and reurn the input and
+    output paths.
+
+    Args:
+        sys_argv ([str]): the command line arguments
+
+    Return:
+        a dict to present the input/ output paths which are needed.
+
+        key                  value      meaning
+        "x_input_path"       str        input file path
+        "y_input_path"       str        input file path
+        "output_path"        str        output file path
+        "output_human_path"  str        output human-redable file path.
+                                        The value could be None
+    """
+    setting = parse_command_args(sys_argv)
+    init_logging(level=logging.DEBUG)
+
+    env().output_min_len = 7
+
+    program_path = dict()
+    program_path['x_input_path']       = "./test/testdata/read_fasta/test1.txt"
+    program_path['y_input_path']       = "./test/testdata/read_fasta/test2.txt"
+    program_path['output_path']        = "./output_test.txt"
+    program_path['output_human_path']  = "./output_test_human.txt"
+
+    return program_path
