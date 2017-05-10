@@ -54,7 +54,4 @@ def compare_seqs(x_seq_path, y_seq_path):
     output_path = utility.make_temp_path("cs_result.bin")
     utility.merge_file(max_seq_paths, output_path)
 
-    logging.info("There are {size} available commom subsequence(s).".format(
-        size=(os.path.getsize(output_path) // 20)))
-
     return output_path
