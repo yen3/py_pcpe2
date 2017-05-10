@@ -2,10 +2,6 @@
 Wrapper for pcpe_core external module.
 
 """
-import logging
-import os
-
-from pypcpe2 import comsubseq
 from pypcpe2 import utility
 
 import pcpe2_core
