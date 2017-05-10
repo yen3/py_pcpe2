@@ -12,7 +12,7 @@ from pypcpe2.env import init_logging
 
 
 def main():
-    init_logging(level=logging.INFO)
+    init_logging(level=logging.DEBUG)
 
     env().output_min_len = 7
 

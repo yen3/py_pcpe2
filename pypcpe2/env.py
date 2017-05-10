@@ -86,15 +86,12 @@ def env():
         return _env_instance
 
 
-def init_logging(*, log_path=None, level=logging.WARNING, show_time_stamp=False):
+def init_logging(*, log_path=None, level=logging.WARNING):
     # Set logging format string
-    format_str = "[%(levelname)s]: %(message)s"
-
     if level <= logging.DEBUG:
-        format_str = "[%(filename)s:%(lineno)d]" + format_str
-
-    if show_time_stamp is True or level <= logging.DEBUG:
-        format_str += " -- %(asctime)-15s"
+        format_str = "[%(levelname)s:%(filename)s:%(lineno)d]: %(message)s"
+    else:
+        format_str = "[%(levelname)s]: %(message)s"
 
     # Apply the setting
     logging.basicConfig(filename=None, level=level, format=format_str)
