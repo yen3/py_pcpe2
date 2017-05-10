@@ -110,11 +110,16 @@ def create_fasta_id_info_file(fasta_path, info_path):
         fasta_path (str): The input fasta file
         info_path (str): The output fasta information file.
     """
+    info_count = 0
     with open(info_path, 'w') as fout:
         for info, _ in read_fasta_file(fasta_path):
             fasta_id = retrieve_fasta_id(info)
 
             fout.write(" ".join([fasta_id, info]) + "\n")
+            info_count = info_count + 1
+
+    logging.info("Parse {path} - {size} fasta id(s)".format(
+        path=fasta_path, size=info_count))
 
 
 class FastaSeqPath(object):
