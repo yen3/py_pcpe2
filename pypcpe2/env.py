@@ -1,3 +1,4 @@
+import os
 import os.path
 import logging
 import argparse
@@ -97,6 +98,55 @@ def init_logging(*, log_path=None, level=logging.WARNING):
 
 
 def parse_command_args(sys_argv):
+    parser = argparse.ArgumentParser(description="PyPCPE2")
+    parser.add_argument('input_path1', action='store', type=str,
+                        nargs=1, help='input file 1')
+    parser.add_argument('input_path2', action='store', type=str,
+                        nargs=1, help='input file 2')
+    parser.add_argument('-o', '--output', metavar="output_path",
+                        dest="output_path", action='store',
+                        type=str, help='output path')
+    parser.add_argument('-r', '--output-human', metavar="output_human_path",
+                        dest="output_human_path",
+                        action='store', type=str, help='output path')
+    parser.add_argument('-l', '--output-min-length', metavar='length',
+                        dest="output_min_length", action='store', type=int,
+                        help=("The minimum length of common subsequence to"
+                              "output (Default value: 10)"))
+    parser.add_argument('-p', '--parallel', metavar="size",
+                        dest="parallel_tasks", action='store', type=int,
+                        help=("The parallelism of the program"
+                              "(Default value: the cpu counts including HT)"))
+    parser.add_argument('-n', '--compare-size', metavar="seq_size",
+                        dest="compare_size", action='store', type=int,
+                        help=("The number of sequences to compare in one time."
+                              "(Default value: 10000)"))
+    parser.add_argument('-b', '--buffer-size', metavar="buffer_size",
+                        dest="buffer_size", action='store', type=int,
+                        help=("The buffer size for each thread's usage"
+                              "(unit: Mbytes) (Default value: 100 Mbyes)"))
+    parser.add_argument('-t', '--temp-folder', metavar="temp_folder_path",
+                        dest="temp_folder", action='store', type=int,
+                        help=("The folder to save temporary files during the"
+                              "executiion (Default value: \"./temp\")"))
+    parser.add_argument('--verbose', metavar="logging_path",
+                        dest="verbose_output_path",
+                        nargs='?', const="", action='store', type=str,
+                        help=("Verbose mode. If the argument is empty, "
+                              "it will output to the console"))
+    parser.add_argument('--debug', metavar="logging_path",
+                        dest="debug_output_path",
+                        nargs='?', const="", action='store', type=str,
+                        help=("Debug modeoutput. If the argument is empty, "
+                              "it will output to the console"))
+    parser.add_argument('--save-temps', action='store_true',
+                        help=('Store all temporary files generated during '
+                              'progress.'))
+
+
+
+    print(parser.parse_args(sys_argv[1:]))
+
     setting = dict()
     return setting
 
