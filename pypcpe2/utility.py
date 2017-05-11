@@ -1,6 +1,7 @@
 import shutil
 import os.path
-from pypcpe2.env import env
+
+from pypcpe2 import env
 
 def retrieve_basename(path):
     """
@@ -24,7 +25,7 @@ def make_temp_path(filename):
     Return:
         A str presents the temp path
     """
-    return os.path.join(env().temp_path, os.path.basename(filename))
+    return os.path.join(env.setting().temp_path, os.path.basename(filename))
 
 
 def merge_file(input_paths, output_path):

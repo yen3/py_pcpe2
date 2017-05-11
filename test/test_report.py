@@ -5,7 +5,7 @@ from pypcpe2 import report
 from pypcpe2 import read_fasta
 from pypcpe2 import comsubseq
 from pypcpe2 import utility
-from pypcpe2.env import env
+from pypcpe2 import env
 
 import test.env
 
@@ -44,12 +44,12 @@ class TestReport(unittest.TestCase):
         self.cs_result_bin = os.path.join(self.test_data_folder,
                                           "cs_result.bin")
 
-        self.saved_temp_path = env().temp_path
-        env().temp_path = self.test_output_folder
-        self.temp_path = env().temp_path
+        self.saved_temp_path = env.setting().temp_path
+        env.setting().temp_path = self.test_output_folder
+        self.temp_path = env.setting().temp_path
 
     def tearDown(self):
-        env().temp_path = self.saved_temp_path
+        env.setting().temp_path = self.saved_temp_path
 
     def test_create_record_object(self):
         x_fasta_seq = read_fasta.FastaSeq(self.fasta_seq_path1)

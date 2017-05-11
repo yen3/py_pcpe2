@@ -1,11 +1,12 @@
 import unittest
 import os.path
 
-import pcpe2_core
-
-from pypcpe2.env import env
+from pypcpe2 import env
 from pypcpe2 import core
 from pypcpe2 import comsubseq
+
+import pcpe2_core
+
 import test.env
 
 
@@ -17,16 +18,16 @@ class TestCore(unittest.TestCase):
         if not os.path.isdir(self.test_output_folder):
             os.makedirs(self.test_output_folder)
 
-        self.saved_temp_path = env().temp_path
-        env().temp_path = self.test_output_folder
-        self.temp_path = env().temp_path
+        self.saved_temp_path = env.setting().temp_path
+        env.setting().temp_path = self.test_output_folder
+        self.temp_path = env.setting().temp_path
 
-        self.saved_output_min_len = env().output_min_len
-        env().output_min_len = 6
+        self.saved_output_min_len = env.setting().output_min_len
+        env.setting().output_min_len = 6
 
     def tearDown(self):
-        env().temp_path = self.saved_temp_path
-        env().output_min_len = self.saved_output_min_len
+        env.setting().temp_path = self.saved_temp_path
+        env.setting().output_min_len = self.saved_output_min_len
 
     def test_compare_small_seqs(self):
         seq1_path = os.path.join(self.test_data_folder, "test1_seq.txt")
@@ -94,8 +95,9 @@ class TestCore(unittest.TestCase):
         self.assertEqual(self.temp_path,
                          os.path.abspath(pcpe2_core.env_get_temp_path()))
 
-        pcpe2_core.env_set_temp_path(env().temp_path)
-        self.assertEqual(pcpe2_core.env_get_temp_path(), env().temp_path)
+        pcpe2_core.env_set_temp_path(env.setting().temp_path)
+        self.assertEqual(pcpe2_core.env_get_temp_path(),
+                         env.setting().temp_path)
 
     def test_env_min_length(self):
         saved_length = pcpe2_core.env_get_min_output_length()

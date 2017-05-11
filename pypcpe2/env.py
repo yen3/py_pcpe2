@@ -3,9 +3,12 @@ import os.path
 import logging
 import argparse
 
+from pypcpe2 import utility
+
 import pcpe2_core
 
-class _Env(object):
+
+class Setting(object):
     def __init__(self):
         self._temp_path = os.path.abspath(pcpe2_core.env_get_temp_path())
         self._buffer_size = pcpe2_core.env_get_buffer_size()
@@ -13,9 +16,26 @@ class _Env(object):
         self._output_min_len = pcpe2_core.env_get_min_output_length()
         self._compare_seq_size = pcpe2_core.env_get_compare_seq_size()
         self._thread_size = pcpe2_core.env_get_thread_size()
+        self._clear_temp_files = True
 
         if not os.path.isdir(self._temp_path):
             os.makedirs(self._temp_path)
+
+    def init_with_command_args(self, raw_args):
+        if raw_args.parallel_tasks is not None:
+            self.thread_size = int(raw_args.parallel_tasks)
+
+        if raw_args.compare_size is not None:
+            self.compare_seq_size = int(raw_args.compare_size)
+
+        if raw_args.buffer_size is not None:
+            self.buffer_size = int(raw_args.buffer_size) * 1024 * 1024
+
+        if raw_args.temp_folder is not None:
+            self.temp_path = os.path.abspath(raw_args.temp_folder)
+
+        if raw_args.save_temps is True:
+            self._clear_temp_files = False
 
     @property
     def temp_path(self):
@@ -74,27 +94,19 @@ class _Env(object):
         self._thread_size = set_size
         pcpe2_core.env_set_thread_size(self._thread_size)
 
-
-_env_instance = None
-def env():
-    global _env_instance
-    if _env_instance is not None:
-        return _env_instance
-    else:
-        _env_instance = _Env()
-        return _env_instance
+    @property
+    def clear_temp_files(self):
+        return self._clear_temp_files
 
 
-def init_logging(*, log_path=None, level=logging.WARNING):
-    # Set logging format string
-    if level <= logging.DEBUG:
-        format_str = "[%(levelname)s:%(filename)s:%(lineno)d]: %(message)s"
-    else:
-        format_str = "[%(levelname)s]: %(message)s"
+_setting_instance = None
+def setting():
+    global _setting_instance
+    if _setting_instance is not None:
+        return _setting_instance
 
-    # Apply the setting
-    logging.basicConfig(filename=None, level=level, format=format_str)
-    pcpe2_core.init_logging(level)
+    _setting_instance = Setting()
+    return _setting_instance
 
 
 def parse_command_args(sys_argv):
@@ -144,11 +156,85 @@ def parse_command_args(sys_argv):
                               'progress.'))
 
 
+    return parser.parse_args(sys_argv[1:])
 
-    print(parser.parse_args(sys_argv[1:]))
 
-    setting = dict()
-    return setting
+def init_logging(*, log_path=None, level=logging.WARNING):
+    """
+    Init the logging.
+
+    Args:
+        log_path (str): the log file path.
+            If the argument is None, the logger print all messages in
+            stdout/ stderr
+        level (int): the logging level
+    """
+    # Set logging format string
+    if level <= logging.DEBUG:
+        format_str = "[%(levelname)s:%(filename)s:%(lineno)d]: %(message)s"
+    else:
+        format_str = "[%(levelname)s]: %(message)s"
+
+    # Apply the setting
+    logging.basicConfig(filename=None, level=level, format=format_str)
+    pcpe2_core.init_logging(level)
+
+
+def init_logging_with_command_args(raw_args):
+    """
+    Init the logging facility by parsing the command arguments
+
+    It's a wrapper for `init_logging`. Just pass the correct argument to the
+    function and do nothing.
+    """
+    check_empty = lambda x: x if x != '' else None
+    if raw_args.verbose_output_path is not None:
+        init_logging(log_path=check_empty(raw_args.verbose_output_path),
+                     level=logging.INFO)
+
+    if raw_args.debug_output_path is not None:
+        init_logging(log_path=check_empty(raw_args.debug_output_path),
+                     level=logging.DEBUG)
+
+
+def parse_input_output_paths(raw_args):
+    """
+    Get input/ output paths by parsing the command arguments
+
+    Return:
+        a dict to present the input/ output paths which are needed.
+
+        key                  value      meaning
+        "x_input_path"       str        input file path
+        "y_input_path"       str        input file path
+        "output_path"        str        output file path
+        "output_human_path"  str        output human-redable file path.
+                                        The value could be None
+    """
+    program_path = dict()
+    program_path['x_input_path'] = os.path.abspath(raw_args.input_path1[0])
+    program_path['y_input_path'] = os.path.abspath(raw_args.input_path2[0])
+
+    if raw_args.output_path is not None:
+        program_path['output_path'] = os.path.abspath(raw_args.output_path)
+    else:
+        output_fn = "{x}_{y}_comsubseq.txt".format(
+            x=utility.retrieve_basename(program_path['x_input_path']),
+            y=utility.retrieve_basename(program_path['y_input_path']))
+
+        program_path['output_path'] = os.path.abspath(os.path.join(".",
+                                                                   output_fn))
+
+    if raw_args.output_human_path is not None:
+        program_path['output_human_path'] = os.path.abspath(
+            raw_args.output_human_path)
+    else:
+        output_human_fn = "{output_base}_human.txt".format(
+            output_base=utility.retrieve_basename(program_path['output_path']))
+        program_path['output_human_path'] = os.path.abspath(os.path.join(
+            ".", output_human_fn))
+
+    return program_path
 
 
 def init_env(sys_argv):
@@ -163,23 +249,20 @@ def init_env(sys_argv):
 
     Return:
         a dict to present the input/ output paths which are needed.
-
-        key                  value      meaning
-        "x_input_path"       str        input file path
-        "y_input_path"       str        input file path
-        "output_path"        str        output file path
-        "output_human_path"  str        output human-redable file path.
-                                        The value could be None
+            See `parse_input_output_paths` function to get details
     """
-    setting = parse_command_args(sys_argv)
-    init_logging(level=logging.DEBUG)
+    # Parse command line arugments
+    raw_args = parse_command_args(sys_argv)
+    print(raw_args)
 
-    env().output_min_len = 7
+    # Set the environment varibles
+    setting().init_with_command_args(raw_args)
 
-    program_path = dict()
-    program_path['x_input_path']       = "./test/testdata/read_fasta/test1.txt"
-    program_path['y_input_path']       = "./test/testdata/read_fasta/test2.txt"
-    program_path['output_path']        = "./output_test.txt"
-    program_path['output_human_path']  = "./output_test_human.txt"
+    # Init logging with command line setting
+    init_logging_with_command_args(raw_args)
+
+    # Parse the input/ output paths
+    program_path = parse_input_output_paths(raw_args)
+    print(program_path)
 
     return program_path

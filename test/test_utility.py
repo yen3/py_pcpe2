@@ -3,7 +3,8 @@ import os
 import os.path
 
 from pypcpe2 import utility
-from pypcpe2.env import env
+# from pypcpe2.env import env
+from pypcpe2 import env
 
 import test.env
 
@@ -15,12 +16,12 @@ class TestUtility(unittest.TestCase):
         if not os.path.isdir(self.test_output_folder):
             os.makedirs(self.test_output_folder)
 
-        self.saved_temp_path = env().temp_path
-        env().temp_path = test.env.test_output_folder
-        self.temp_path = env().temp_path
+        self.saved_temp_path = env.setting().temp_path
+        env.setting().temp_path = test.env.test_output_folder
+        self.temp_path = env.setting().temp_path
 
     def tearDown(self):
-        env().temp_path = self.saved_temp_path
+        env.setting().temp_path = self.saved_temp_path
 
     def test_make_temp_path(self):
         # test case 1

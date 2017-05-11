@@ -1,7 +1,7 @@
 import unittest
 import os.path
 
-from pypcpe2.env import env
+from pypcpe2 import env
 from pypcpe2 import read_fasta
 from pypcpe2 import utility
 
@@ -41,13 +41,13 @@ class TestReadFasta(unittest.TestCase):
             fasta_id_info_path=os.path.join(self.test_data_folder,
                                       "test2_id_info.txt"))
 
-        self.saved_temp_path = env().temp_path
-        env().temp_path = self.test_output_folder
-        self.temp_path = env().temp_path
+        self.saved_temp_path = env.setting().temp_path
+        env.setting().temp_path = self.test_output_folder
+        self.temp_path = env.setting().temp_path
 
 
     def tearDown(self):
-        env().temp_path = self.saved_temp_path
+        env.setting().temp_path = self.saved_temp_path
 
     def test_retrieve_fasta_id(self):
         id_line1 = ">gi|9999999999|gb|AOS87590|pypcpe2 test sequence1"
