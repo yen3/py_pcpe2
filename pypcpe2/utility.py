@@ -1,7 +1,6 @@
 import shutil
 import os.path
 
-from pypcpe2.env import setting
 
 def retrieve_basename(path):
     """
@@ -25,6 +24,7 @@ def make_temp_path(filename):
     Return:
         A str presents the temp path
     """
+    from pypcpe2.env import setting
     return os.path.join(setting().temp_path, os.path.basename(filename))
 
 
