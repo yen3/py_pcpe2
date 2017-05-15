@@ -23,4 +23,7 @@ def main():
     report.make_report(x_paths, y_paths, comsubseq_path,
                        paths["output_path"], paths["output_human_path"])
 
-    logging.info("Exit from the program.")
+    logging.info("Clean the environment")
+    env.clean_env()
+
+    logging.info("Exit from the program")

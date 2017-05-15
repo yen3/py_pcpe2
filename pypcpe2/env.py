@@ -2,6 +2,7 @@ import os
 import os.path
 import logging
 import argparse
+import shutil
 
 from pypcpe2 import utility
 
@@ -266,3 +267,8 @@ def init_env(sys_argv):
     print(program_path)
 
     return program_path
+
+def clean_env():
+    if setting().clear_temp_files == True:
+        shutil.rmtree(setting().temp_path)
+
