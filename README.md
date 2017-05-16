@@ -18,8 +18,6 @@
 * C++ compiler with C++11 support.
   * gcc 4.8.4 or later
   * clang 3.4 or later
-* cmake
-
 
 ## Install
 
@@ -30,5 +28,3 @@ virualenv -p python3 .env
 source .env/bin/activate
 python setup.py install
 ```
-
-
