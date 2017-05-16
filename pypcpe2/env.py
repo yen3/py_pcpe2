@@ -139,7 +139,7 @@ def parse_command_args(sys_argv):
                         help=("The buffer size for each thread's usage"
                               "(unit: Mbytes) (Default value: 100 Mbyes)"))
     parser.add_argument('-t', '--temp-folder', metavar="temp_folder_path",
-                        dest="temp_folder", action='store', type=int,
+                        dest="temp_folder", action='store', type=str,
                         help=("The folder to save temporary files during the"
                               "executiion (Default value: \"./temp\")"))
     parser.add_argument('--verbose', metavar="logging_path",
@@ -210,7 +210,6 @@ def parse_input_output_paths(raw_args):
         "y_input_path"       str        input file path
         "output_path"        str        output file path
         "output_human_path"  str        output human-redable file path.
-                                        The value could be None
     """
     program_path = dict()
     program_path['x_input_path'] = os.path.abspath(raw_args.input_path1[0])
