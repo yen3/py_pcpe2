@@ -20,8 +20,8 @@ before_install:
   - export CC=gcc-4.8
 
 install:
-  - pip install -r requirements.txt
+  - pip3 install -r requirements.txt
 
 script:
-  - python setup.py develop
+  - python3 setup.py develop
   - pytest --ignore="setup.py" --ignore="read_fasta.py" --doctest-modules --cov=pypcpe2 -v -s
