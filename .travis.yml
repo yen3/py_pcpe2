@@ -24,4 +24,5 @@ install:
 
 script:
   - python3 setup.py develop
-  - pytest --ignore="setup.py" --ignore="read_fasta.py" --doctest-modules --cov=pypcpe2 -v -s
+  #- pytest --ignore="setup.py" --ignore="read_fasta.py" --doctest-modules --cov=pypcpe2 -v -s
+  - nosetests --detailed-errors --with-doctest -v
