@@ -1,2 +1,3 @@
 nose
 pybind11>=1.7
+pytest
