@@ -1,8 +1,14 @@
 FROM ubuntu:16.04
 
-RUN apt-get update && apt-get upgrade -y && \
-    apt-get install -y apt-utils && \
-    apt-get install -y build-essential \
+RUN apt-get update
+RUN apt-get upgrade -y
+RUN apt-get install software-properties-common -y
+
+RUN add-apt-repository ppa:ubuntu-toolchain-r/test
+
+RUN apt-get update RUN apt-get upgrade -y
+RUN apt-get install -y g++ \
+                       g++-6 \
                        cmake \
                        git \
                        python3 \
