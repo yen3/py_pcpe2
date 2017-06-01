@@ -1,7 +1,5 @@
 FROM ubuntu:16.04
 
-#RUN locale-gen en_US.UTF-8 && sudo dpkg-reconfigure locales
-
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y apt-utils && \
     apt-get install -y build-essential \
