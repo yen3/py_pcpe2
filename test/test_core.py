@@ -38,8 +38,12 @@ class TestCore(unittest.TestCase):
         self.assertEqual(len(cs_paths), 1)
         seqs = comsubseq.read_comsubseq_file(cs_paths[0])
 
-        ans_path = os.path.join(self.test_data_folder, "compare_hash_0")
-        ans = comsubseq.read_comsubseq_file(ans_path)
+        ans = [comsubseq.ComSubseq(0, 0, 1, 0, 6),
+               comsubseq.ComSubseq(1, 0, 1, 0, 6),
+               comsubseq.ComSubseq(2, 0, 1, 0, 6),
+               comsubseq.ComSubseq(1, 1, 2, 0, 6),
+               comsubseq.ComSubseq(2, 1, 2, 0, 6),
+               comsubseq.ComSubseq(2, 1, 3, 1, 6)]
 
         self.assertEqual(seqs, ans)
 
