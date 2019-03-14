@@ -1,4 +1,6 @@
-FROM python:3.6-stretch
+ARG PYTHON_VERSION=3.6
+
+FROM python:${PYTHON_VERSION}-stretch
 
 ADD . /app
 

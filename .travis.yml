@@ -9,8 +9,7 @@ services:
   - docker
 
 install:
-  - docker build -t yen3/pypcpe2-test .
+  - docker build --build-arg PYTHON_VERSION=${TRAVIS_PYTHON_VERSION} -t yen3/pypcpe2-test .
 
 script:
   - docker run --rm yen3/pypcpe2-test
-  - echo ${TRAVIS_PYTHON_VERSION}
