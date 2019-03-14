@@ -5,24 +5,12 @@ python:
   - "3.5"
   - "3.6"
 
-addons:
-  apt:
-    sources:
-    - ubuntu-toolchain-r-test
-    - deadsnakes
-    packages:
-    - g++-4.8
-    - python-dev
-    - cmake
-
-before_install:
-  - export CXX=g++-4.8
-  - export CC=gcc-4.8
+services:
+  - docker
 
 install:
-  - pip3 install -r requirements.txt
+  - docker build -t yen3/pypcpe2-test .
 
 script:
-  - python3 setup.py develop
-  #- pytest --ignore="setup.py" --ignore="read_fasta.py" --doctest-modules --cov=pypcpe2 -v -s
-  - nosetests --detailed-errors --with-doctest -v
+  - docker run --rm yen3/pypcpe2-test
+  - echo ${TRAVIS_PYTHON_VERSION}

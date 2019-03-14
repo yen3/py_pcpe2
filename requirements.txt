@@ -1,4 +1,2 @@
 nose
-pybind11>=1.7
-pytest
-pytest-cov
+pybind11==2.2.4
